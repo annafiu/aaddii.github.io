@@ -1,1 +1,320 @@
-css
+ /* --- RESET & VARIABEL --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #faf9f6;       
+            --text-main: #111111;      
+            --text-muted: #6e6e6e;     
+            --border-color: #e8e6e0;   
+            
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Courier Prime', monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER & NAVIGASI UTAMA --- */
+        .site-header {
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: rgba(250, 249, 246, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .site-nav button {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-left: 2rem;
+            font-family: var(--font-mono);
+            transition: color 0.2s;
+        }
+
+        .site-nav button:hover, .site-nav button.active {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* --- LAYOUT UTAMA --- */
+        .container-main {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            min-height: 60vh;
+        }
+
+        /* --- HOMEPAGE / INDEKS --- */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active-view {
+            display: block;
+        }
+
+        .index-intro {
+            margin-bottom: 5rem;
+            max-width: 600px;
+        }
+
+        .manifesto {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .journal-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .journal-row {
+    display:grid;
+    grid-template-columns:120px 1fr 100px;
+    gap:2rem;
+    padding:2.5rem 0;
+    border-top:1px solid var(--border-color);
+    align-items:start;
+}
+
+        .journal-row.visible-row {
+            display: grid;
+        }
+
+        .journal-row:last-of-type {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .journal-meta {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .journal-number {
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .journal-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .journal-title {
+            font-family: var(--font-serif);
+            font-size: 1.85rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .journal-link {
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            transition: color 0.2s ease;
+        }
+
+        .journal-link:hover {
+            color: var(--text-muted);
+        }
+
+        .journal-excerpt {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin-bottom: 0.75rem;
+        }
+
+        .journal-author {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .journal-thumbnail {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            opacity: 0.3; 
+            filter: grayscale(100%);
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .journal-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .journal-row:hover .journal-thumbnail {
+            opacity: 0.8;
+            filter: grayscale(0%);
+        }
+
+        /* --- HOMEPAGE PAGINATION (SESUAI GAMBAR) --- */
+        .homepage-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+        }
+
+        /* --- NAVIGASI BUTTONS (HOMEPAGE & IN-POST) --- */
+        .nav-simple-btn {
+            background: none;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .nav-simple-btn:hover:not(:disabled) {
+            color: var(--text-main);
+        }
+
+        .nav-simple-btn:disabled {
+            visibility: hidden; /* Elemen disembunyikan jika tidak ada page lagi agar space tetap rapi */
+        }
+
+        /* --- HALAMAN DETIL POSTINGAN (ESSAY VIEW) --- */
+        .essay-view {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            color: var(--text-main);
+        }
+
+        .essay-header {
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .essay-title-large {
+            font-family: var(--font-serif);
+            font-size: 2.6rem;
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .essay-body {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            line-height: 1.85;
+            color: #222;
+        }
+
+        .essay-body p {
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+
+        /* --- NAVIGASI DI DALAM POSTINGAN --- */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* --- ABOUT VIEW --- */
+        .about-view {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* --- FOOTER --- */
+        .site-footer {
+            max-width: 1200px;
+            margin: 8rem auto 0 auto;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .journal-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 2rem 0;
+            }
+            .journal-meta { flex-direction: row; gap: 1rem; }
+            .journal-title { font-size: 1.5rem; }
+            .journal-thumbnail { display: none; }
+        }
