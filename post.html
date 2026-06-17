@@ -155,8 +155,15 @@ function renderPost(data){
             document.getElementById('title')
                 .innerHTML=post.title.$t;
 
-            document.getElementById('content')
-                .innerHTML=post.content.$t;
+            let html = post.content.$t;
+
+// hapus judul H1 dari Blogger jika ada
+html = html.replace(
+    /<h1[^>]*>.*?<\/h1>/is,
+    ''
+);
+
+document.getElementById('content').innerHTML = html;
 
             return;
         }
