@@ -15,26 +15,21 @@
     
 <body>
 <header class="site-header">
-    <div class="header-container">
-        <h1 class="logo">
-            <a href="https://www.annafiu.com/aaddii.github.io/">
-                aaddii.com
-            </a>
-        </h1>
+        <div class="header-container">
+            <h1 class="logo"><a href="#" onclick="showSection('index-view')">aaddii.com</a></h1>
+            <nav class="site-nav">
+                <button id="nav-index" class="active" onclick="showSection('index-view')">Indeks</button>
+                <button id="nav-about" onclick="showSection('about-view')">Tentang</button>
+            </nav>
+        </div>
+    </header>
 
-        <nav class="site-nav">
-            <a href="https://www.annafiu.com/aaddii.github.io/"
-               class="nav-link">
-               Indeks
-            </a>
+    <div class="container-main">
 
-            <a href="https://www.annafiu.com/aaddii.github.io/#about"
-               class="nav-link">
-               Tentang
-            </a>
-        </nav>
-    </div>
-</header>
+        <section id="index-view" class="view-section active-view">
+            <header class="index-intro">
+                <p class="manifesto">Kumpulan esai, catatan spekulatif, dan pembacaan kritis atas arsitektur, ruang, dan lanskap.</p>
+            </header>
 <div class="article-container">
 
 <a class="back" href="https://www.annafiu.com/aaddii.github.io/">
