@@ -113,6 +113,13 @@ function loadPosts(data){
     const paginationContainer = document.getElementById('numeric-pagination');
     
     if (paginationContainer) {
+        // PENGAMAN: Jika halaman "Tentang" sedang aktif, langsung kosongkan pagination & stop script!
+        const aboutView = document.getElementById('about-view');
+        if (aboutView && aboutView.classList.contains('active-view')) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
         paginationContainer.innerHTML = ''; 
         
         // Hitung total halaman yang ada
@@ -237,7 +244,7 @@ function renderPost(data){
             prevButton.style.visibility = 'visible'; 
         }
     } else if (prevButton) {
-        prevButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak layout
+        prevButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak posisi tombol kanan
     }
 
     // 2. ATUR TOMBOL KANAN (NEXT - Artikel Lebih Lama)
@@ -249,7 +256,7 @@ function renderPost(data){
             nextButton.style.visibility = 'visible';
         }
     } else if (nextButton) {
-        nextButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak layout
+        nextButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak posisi tombol kiri
     }
 } 
 
@@ -265,13 +272,12 @@ function showSection(sectionId){
     }
 
     // PENGAMAN 2: Cek apakah kontainer list jurnal utama ada di halaman ini.
-    // Jika tidak ada, berarti kita sedang di halaman detail, jangan teruskan fungsi beranda!
     const isHomepage = document.getElementById('main-journal-list');
     if (!isHomepage) {
         return; 
     }
 
-    // --- KODE SPA ASLI KAMU DI BAWAH INI TETAP BERJALAN JIKA SEDANG DI BERANDA ---
+    // --- KODE SPA JIKA SEDANG DI BERANDA ---
     document
         .querySelectorAll('.view-section')
         .forEach(
@@ -293,8 +299,15 @@ function showSection(sectionId){
         navIndex.classList.add('active');
     }
 
+    // MEMBERSIHKAN PAGINATION SAAT MENU "TENTANG" DIKLIK
     if(sectionId==='about-view' && navAbout){
         navAbout.classList.add('active');
+        
+        // Cari kontainer pagination dan hapus isinya seketika
+        const pgContainer = document.getElementById('numeric-pagination');
+        if(pgContainer) {
+            pgContainer.innerHTML = '';
+        }
     }
 
     window.scrollTo({
