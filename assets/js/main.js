@@ -2,8 +2,7 @@
    AADDII.COM MAIN JS
 ===================================== */
 
-const BLOG_URL =
-'https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50';
+const BLOG_URL = 'https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50';
 
 /* =====================================
    HELPERS
@@ -21,14 +20,16 @@ function getSlug(){
 }
 
 /* =====================================
-   INDEX PAGE
+   INDEX PAGE UTILITIES
 ===================================== */
+
 // Fungsi untuk mengambil nomor halaman aktif dari URL browser
 function getCurrentPage() {
     const url = new URLSearchParams(window.location.search);
     const page = parseInt(url.get('page'));
     return (page && page > 0) ? page : 1;
 }
+
 /* =====================================
    INDEX PAGE (HITUNGAN MUNDUR + PAGINATION ANGKA)
 ===================================== */
@@ -44,7 +45,7 @@ function loadPosts(data){
     container.innerHTML = '';
     const entries = data.feed.entry;
 
-    // 1. Ambil total seluruh postingan global dari Blogspot (Penting untuk hitungan mundur lintas halaman)
+    // 1. Ambil total seluruh postingan global dari Blogspot
     const totalResults = parseInt(data.feed.openSearch$totalResults.$t);
     const currentPage = getCurrentPage();
 
@@ -71,7 +72,6 @@ function loadPosts(data){
         const article = document.createElement('article');
         article.className = 'journal-row';
 
-        // DI SINI LOGIKA HITUNG MUNDUR GLOBAL NYA:
         // Menjamin nomor urut tetap mundur dengan benar meskipun artikel sudah berpindah halaman
         const currentPostNumber = totalResults - ((currentPage - 1) * POSTS_PER_PAGE) - index;
 
@@ -174,11 +174,8 @@ function renderPost(data){
     if(!data.feed || !data.feed.entry) return;
 
     const entries = data.feed.entry;
-
-    // Tambahkan variabel pembantu untuk mencari index artikel aktif
     let currentIndex = -1;
 
-    // 1. Loop pertama: Cari tahu artikel aktif berada di index ke-berapa
     for(let i = 0; i < entries.length; i++){
         const alt = entries[i].link.find(l => l.rel === 'alternate');
         if(!alt) continue;
@@ -190,14 +187,12 @@ function renderPost(data){
         }
     }
 
-    // Jika artikel tidak ketemu di data JSON
     if(currentIndex === -1) {
         const titleElement = document.getElementById('title');
         if(titleElement) titleElement.innerHTML = 'Artikel tidak ditemukan';
         return;
     }
 
-    // 2. Ambil data artikel aktif berdasarkan index yang didapat
     const post = entries[currentIndex];
     const title = post.title.$t;
     let content = post.content ? post.content.$t : '';
@@ -226,10 +221,9 @@ function renderPost(data){
     const nextButton = document.getElementById('next-btn');
     const prevButton = document.getElementById('prev-btn');
 
-    const nextIndex = currentIndex - 1; // Artikel berikutnya (lebih lama)
-    const prevIndex = currentIndex + 1; // Artikel sebelumnya (lebih baru)
+    const nextIndex = currentIndex - 1; 
+    const prevIndex = currentIndex + 1; 
 
-    // Set Link Otomatis untuk NEXT
     if (nextIndex < entries.length && nextButton) {
         const nextAlt = entries[nextIndex].link.find(l => l.rel === 'alternate');
         if(nextAlt) {
@@ -237,10 +231,9 @@ function renderPost(data){
             nextButton.href = `post.html?slug=${nextSlug}`;
         }
     } else if (nextButton) {
-        nextButton.style.display = 'none'; // Sembunyikan jika artikel paling akhir
+        nextButton.style.display = 'none'; 
     }
 
-    // Set Link Otomatis untuk PREV
     if (prevIndex >= 0 && prevButton) {
         const prevAlt = entries[prevIndex].link.find(l => l.rel === 'alternate');
         if(prevAlt) {
@@ -248,7 +241,7 @@ function renderPost(data){
             prevButton.href = `post.html?slug=${prevSlug}`;
         }
     } else if (prevButton) {
-        prevButton.style.display = 'none'; // Sembunyikan jika artikel paling baru
+        prevButton.style.display = 'none'; 
     }
 }
 
@@ -261,30 +254,19 @@ function showSection(sectionId){
     document
         .querySelectorAll('.view-section')
         .forEach(
-            sec =>
-            sec.classList.remove('active-view')
+            sec => sec.classList.remove('active-view')
         );
 
-    const target=
-        document.getElementById(sectionId);
-
+    const target = document.getElementById(sectionId);
     if(target){
         target.classList.add('active-view');
     }
 
-    const navIndex=
-        document.getElementById('nav-index');
+    const navIndex = document.getElementById('nav-index');
+    const navAbout = document.getElementById('nav-about');
 
-    const navAbout=
-        document.getElementById('nav-about');
-
-    if(navIndex){
-        navIndex.classList.remove('active');
-    }
-
-    if(navAbout){
-        navAbout.classList.remove('active');
-    }
+    if(navIndex){ navIndex.classList.remove('active'); }
+    if(navAbout){ navAbout.classList.remove('active'); }
 
     if(sectionId==='index-view' && navIndex){
         navIndex.classList.add('active');
@@ -301,7 +283,7 @@ function showSection(sectionId){
 }
 
 /* =====================================
-   PAGE INIT (PENGGERAK PAGINATION & NAVIGASI)
+   PAGE INIT (Hanya Ada Satu Listener DOM)
 ===================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -309,12 +291,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 1. KONDISI UNTUK HALAMAN UTAMA (INDEX) */
     if (document.getElementById('main-journal-list')) {
         const currentPage = getCurrentPage();
-        
-        // Rumus menentukan titik awal penarikan data Blogger
         const startIndex = ((currentPage - 1) * POSTS_PER_PAGE) + 1;
 
         const script = document.createElement('script');
-        // Menarik data terbatas sesuai jumlah POSTS_PER_PAGE agar pagination bekerja
         script.src = `https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=${POSTS_PER_PAGE}&start-index=${startIndex}&callback=loadPosts`;
         document.body.appendChild(script);
     }
@@ -322,50 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 2. KONDISI UNTUK HALAMAN BACA ARTIKEL (POST) */
     if (document.getElementById('content')) {
         const script = document.createElement('script');
-        // PENGAMAN: Tetap tarik 100 data massal agar tombol next/prev di dalam artikel tidak patah
         script.src = `https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost`;
         document.body.appendChild(script);
     }
 });
-        /*
-        INDEX PAGE
-        */
-
-        if(
-            document.getElementById(
-                'main-journal-list'
-            )
-        ){
-
-            const script=
-                document.createElement('script');
-
-            script.src=
-                BLOG_URL +
-                '&callback=loadPosts';
-
-            document.body.appendChild(script);
-        }
-
-        /*
-        POST PAGE
-        */
-
-        if(
-            document.getElementById(
-                'content'
-            )
-        ){
-
-            const script=
-                document.createElement('script');
-
-            script.src=
-                BLOG_URL +
-                '&callback=renderPost';
-
-            document.body.appendChild(script);
-        }
-
-    }
-);
