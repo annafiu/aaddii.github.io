@@ -219,41 +219,6 @@ function renderPost(data){
     contentElement.innerHTML = content;
 
     // =====================================
-    // LOGIKA OTOMATIS TOMBOL NEXT & PREV (FIXED)
-    // =====================================
-    const nextButton = document.getElementById('next-btn');
-    const prevButton = document.getElementById('prev-btn');
-
-    // Mengikuti urutan data Blogger (0 = Paling Baru, entries.length - 1 = Paling Lama)
-    const nextIndex = currentIndex + 1; // Artikel berikutnya (lebih lama / angka index membesar)
-    const prevIndex = currentIndex - 1; // Artikel sebelumnya (lebih baru / angka index mengecil)
-
-    // 1. ATUR TOMBOL NEXT (Artikel Lebih Lama)
-    if (nextIndex < entries.length && nextButton) {
-        const nextAlt = entries[nextIndex].link.find(l => l.rel === 'alternate');
-        if (nextAlt) {
-            const nextSlug = nextAlt.href.split('/').pop().replace('.html', '');
-            nextButton.href = `post.html?slug=${nextSlug}`;
-            nextButton.style.display = 'inline-block';
-        }
-    } else if (nextButton) {
-        nextButton.style.display = 'none'; // Sembunyikan jika sudah di esai paling akhir (paling lama)
-    }
-
-    // 2. ATUR TOMBOL PREV (Artikel Lebih Baru)
-    if (prevIndex >= 0 && prevButton) {
-        const prevAlt = entries[prevIndex].link.find(l => l.rel === 'alternate');
-        if (prevAlt) {
-            const prevSlug = prevAlt.href.split('/').pop().replace('.html', '');
-            prevButton.href = `post.html?slug=${prevSlug}`;
-            prevButton.style.display = 'inline-block';
-        }
-    } else if (prevButton) {
-        prevButton.style.display = 'none'; // Sembunyikan jika sudah di esai paling awal (Latest Post)
-    }
-}
-
-    // =====================================
     // LOGIKA OTOMATIS TOMBOL NEXT & PREV (PERBAIKAN SAKLEK)
     // =====================================
     const nextButton = document.getElementById('next-btn');
@@ -269,7 +234,7 @@ function renderPost(data){
         if (nextAlt) {
             const nextSlug = nextAlt.href.split('/').pop().replace('.html', '');
             nextButton.href = `post.html?slug=${nextSlug}`;
-            nextButton.style.display = 'inline-block'; // Pastikan muncul jika ada datanya
+            nextButton.style.display = 'inline-block'; 
         }
     } else if (nextButton) {
         nextButton.style.display = 'none'; // Sembunyikan total jika sudah di esai paling akhir/lama
@@ -281,11 +246,12 @@ function renderPost(data){
         if (prevAlt) {
             const prevSlug = prevAlt.href.split('/').pop().replace('.html', '');
             prevButton.href = `post.html?slug=${prevSlug}`;
-            prevButton.style.display = 'inline-block'; // Pastikan muncul jika ada datanya
+            prevButton.style.display = 'inline-block'; 
         }
     } else if (prevButton) {
         prevButton.style.display = 'none'; // Sembunyikan total jika sudah di esai paling awal/baru (Latest Post)
     }
+}
 
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
@@ -336,6 +302,7 @@ function showSection(sectionId){
         behavior:'smooth'
     });
 }
+
 /* =====================================
    PAGE INIT (Hanya Ada Satu Listener DOM)
 ===================================== */
