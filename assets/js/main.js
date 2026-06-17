@@ -246,17 +246,24 @@ function renderPost(data){
 }
 
 /* =====================================
-   SINGLE PAGE NAV
+   SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
 ===================================== */
 
 function showSection(sectionId){
     
-    // PENGAMAN: Jika sedang di halaman detail artikel (post.html), 
-    // matikan fungsi SPA agar perpindahan halaman esai tidak dipaksa kembali ke homepage
+    // PENGAMAN 1: Jika berada di halaman post.html, stop fungsi SPA!
     if (window.location.pathname.includes('post.html')) {
         return; 
     }
 
+    // PENGAMAN 2: Cek apakah kontainer list jurnal utama ada di halaman ini.
+    // Jika tidak ada, berarti kita sedang di halaman detail, jangan teruskan fungsi beranda!
+    const isHomepage = document.getElementById('main-journal-list');
+    if (!isHomepage) {
+        return; 
+    }
+
+    // --- KODE SPA ASLI KAMU DI BAWAH INI TETAP BERJALAN JIKA SEDANG DI BERANDA ---
     document
         .querySelectorAll('.view-section')
         .forEach(
