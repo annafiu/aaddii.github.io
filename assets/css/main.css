@@ -186,6 +186,7 @@
             opacity: 0.3; 
             filter: grayscale(100%);
             transition: opacity 0.3s ease, filter 0.3s ease;
+            border: 1px solid #878787
         }
 
         .journal-thumbnail img {
