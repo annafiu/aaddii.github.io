@@ -16,7 +16,7 @@
 <body>
 <header class="site-header">
         <div class="header-container">
-            <h1 class="logo"><a href="#" onclick="showSection('index-view')">aaddii.com</a></h1>
+            <h1 class="logo"><a href="https://www.annafiu.com/aaddii.github.io/" onclick="showSection('index-view')">aaddii.com</a></h1>
             <nav class="site-nav">
                 <button id="nav-index" class="active" onclick="showSection('index-view')">Indeks</button>
                 <button id="nav-about" onclick="showSection('about-view')">Tentang</button>
@@ -28,10 +28,6 @@
 
         <section id="index-view" class="view-section active-view">
 <div class="article-container">
-
-<a class="back" href="https://www.annafiu.com/aaddii.github.io/">
-← Kembali ke Indeks
-</a>
 
 <article>
 <header class="essay-header">
@@ -47,11 +43,19 @@ Loading...
 <div id="content"></div>
 </article>
 <div class="article-footer">
-    aaddii.com — Jurnal & Catatan Ruang
+    <div class="post-nav">
+      <a href="./">← next</a>
+      <a href="./">prev →</a>
+    </div>
 </div>
 
 </div>
-
+<footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 aaddii.com.</p>
+            <p>Indeks Jurnal Terbuka.</p>
+        </div>
+    </footer>
 <script src="https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost"></script>
 <script src="./assets/js/main.js"></script>
 </body>
