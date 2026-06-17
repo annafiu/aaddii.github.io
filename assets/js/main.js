@@ -219,7 +219,7 @@ function renderPost(data){
     contentElement.innerHTML = content;
 
     // =====================================
-    // LOGIKA OTOMATIS NAVIGATION (FIXED & ALIGNED)
+    // LOGIKA OTOMATIS NAVIGATION (DENGAN VISIBILITY HIDDEN)
     // =====================================
     const prevButton = document.getElementById('prev-btn'); // Link Sebelah Kiri (Lebih Baru)
     const nextButton = document.getElementById('next-btn'); // Link Sebelah Kanan (Lebih Lama)
@@ -234,10 +234,10 @@ function renderPost(data){
         if (prevAlt) {
             const prevSlug = prevAlt.href.split('/').pop().replace('.html', '');
             prevButton.href = `post.html?slug=${prevSlug}`;
-            prevButton.style.display = 'inline-block'; 
+            prevButton.style.visibility = 'visible'; 
         }
     } else if (prevButton) {
-        prevButton.style.display = 'none'; // Sembunyikan jika berada di postingan paling baru
+        prevButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak layout
     }
 
     // 2. ATUR TOMBOL KANAN (NEXT - Artikel Lebih Lama)
@@ -246,12 +246,12 @@ function renderPost(data){
         if (nextAlt) {
             const nextSlug = nextAlt.href.split('/').pop().replace('.html', '');
             nextButton.href = `post.html?slug=${nextSlug}`;
-            nextButton.style.display = 'inline-block';
+            nextButton.style.visibility = 'visible';
         }
     } else if (nextButton) {
-        nextButton.style.display = 'none'; // Sembunyikan jika berada di postingan paling lama
+        nextButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak layout
     }
-} // <--- TANDA INI YANG KEMARIN HILANG (MENUTUP RENDERPOST DENGAN SEMPURNA)
+} 
 
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
