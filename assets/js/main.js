@@ -95,7 +95,7 @@ function loadPosts(data){
                     ${excerpt}
                 </p>
                 <span class="journal-author">
-                    Farrij Tri Annafi'u
+                    Adi Iman Wicaksono
                 </span>
             </div>
 
