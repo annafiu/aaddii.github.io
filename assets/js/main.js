@@ -23,29 +23,37 @@ function getSlug(){
 /* =====================================
    INDEX PAGE
 ===================================== */
+// Fungsi untuk mengambil nomor halaman aktif dari URL browser
+function getCurrentPage() {
+    const url = new URLSearchParams(window.location.search);
+    const page = parseInt(url.get('page'));
+    return (page && page > 0) ? page : 1;
+}
+/* =====================================
+   INDEX PAGE (HITUNGAN MUNDUR + PAGINATION ANGKA)
+===================================== */
+
+const POSTS_PER_PAGE = 4; // Tentukan di sini mau memunculkan berapa artikel per halaman
 
 function loadPosts(data){
 
     const container = document.getElementById('main-journal-list');
-
     if(!container) return;
-
     if(!data.feed || !data.feed.entry) return;
 
     container.innerHTML = '';
-
     const entries = data.feed.entry;
 
+    // 1. Ambil total seluruh postingan global dari Blogspot (Penting untuk hitungan mundur lintas halaman)
+    const totalResults = parseInt(data.feed.openSearch$totalResults.$t);
+    const currentPage = getCurrentPage();
+
     entries.forEach((post, index) => {
-
         const title = post.title.$t;
-
         const content = post.content ? post.content.$t : '';
-
         const excerpt = stripHtml(content).substring(0, 180) + '...';
 
         let slug = '';
-
         if(post.link){
             const alt = post.link.find(l => l.rel === 'alternate');
             if(alt){
@@ -54,55 +62,41 @@ function loadPosts(data){
         }
 
         let thumb = '';
-
         const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
-
-        if(imgMatch){
-            thumb = imgMatch[1];
-        }
+        if(imgMatch){ thumb = imgMatch[1]; }
 
         const dateObj = new Date(post.published.$t);
-
-        const dateText = dateObj.toLocaleDateString(
-            'id-ID',
-            {
-                month: 'short',
-                year: 'numeric'
-            }
-        );
+        const dateText = dateObj.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
 
         const article = document.createElement('article');
-
         article.className = 'journal-row';
 
-        // DI SINI PERBAIKANNYA: Menggunakan entries.length, bukan articles.length
+        // DI SINI LOGIKA HITUNG MUNDUR GLOBAL NYA:
+        // Menjamin nomor urut tetap mundur dengan benar meskipun artikel sudah berpindah halaman
+        const currentPostNumber = totalResults - ((currentPage - 1) * POSTS_PER_PAGE) - index;
+
         article.innerHTML = `
             <div class="journal-meta">
                 <span class="journal-number">
-                    #${String(entries.length - index).padStart(2, '0')}
+                    #${String(currentPostNumber).padStart(2, '0')}
                 </span>
-
                 <span class="journal-date">
                     ${dateText}
                 </span>
             </div>
 
             <div class="journal-content">
-
                 <h2 class="journal-title">
                     <a class="journal-link" href="post.html?slug=${slug}">
                         ${title}
                     </a>
                 </h2>
-
                 <p class="journal-excerpt">
                     ${excerpt}
                 </p>
-
                 <span class="journal-author">
                     Farrij Tri Annafi'u
                 </span>
-
             </div>
 
             <div class="journal-thumbnail">
@@ -111,13 +105,57 @@ function loadPosts(data){
         `;
 
         container.appendChild(article);
-
     });
 
-    const nav = document.querySelector('.homepage-pagination');
+    // =====================================
+    // LOGIKA GENERATE ANGKA PAGINATION
+    // =====================================
+    const paginationContainer = document.getElementById('numeric-pagination');
+    
+    if (paginationContainer) {
+        paginationContainer.innerHTML = ''; 
+        
+        // Hitung total halaman yang ada
+        const totalPages = Math.ceil(totalResults / POSTS_PER_PAGE);
+        
+        if (totalPages > 1) {
+            
+            // Tombol 'prev'
+            const prevLink = document.createElement('a');
+            prevLink.innerText = 'prev';
+            if (currentPage > 1) {
+                prevLink.href = `?page=${currentPage - 1}`;
+                prevLink.className = 'page-nav-trigger';
+            } else {
+                prevLink.className = 'page-nav-trigger disabled';
+            }
+            paginationContainer.appendChild(prevLink);
 
-    if(nav){
-        nav.style.display = 'none';
+            // Daftar Angka Halaman (1, 2, 3, dst.)
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.innerText = i;
+                pageLink.href = `?page=${i}`;
+                
+                if (i === currentPage) {
+                    pageLink.className = 'page-number active';
+                } else {
+                    pageLink.className = 'page-number';
+                }
+                paginationContainer.appendChild(pageLink);
+            }
+
+            // Tombol 'next'
+            const nextLink = document.createElement('a');
+            nextLink.innerText = 'next';
+            if (currentPage < totalPages) {
+                nextLink.href = `?page=${currentPage + 1}`;
+                nextLink.className = 'page-nav-trigger';
+            } else {
+                nextLink.className = 'page-nav-trigger disabled';
+            }
+            paginationContainer.appendChild(nextLink);
+        }
     }
 }
 
@@ -263,13 +301,32 @@ function showSection(sectionId){
 }
 
 /* =====================================
-   PAGE INIT
+   PAGE INIT (PENGGERAK PAGINATION & NAVIGASI)
 ===================================== */
 
-document.addEventListener(
-    'DOMContentLoaded',
-    ()=>{
+document.addEventListener('DOMContentLoaded', () => {
 
+    /* 1. KONDISI UNTUK HALAMAN UTAMA (INDEX) */
+    if (document.getElementById('main-journal-list')) {
+        const currentPage = getCurrentPage();
+        
+        // Rumus menentukan titik awal penarikan data Blogger
+        const startIndex = ((currentPage - 1) * POSTS_PER_PAGE) + 1;
+
+        const script = document.createElement('script');
+        // Menarik data terbatas sesuai jumlah POSTS_PER_PAGE agar pagination bekerja
+        script.src = `https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=${POSTS_PER_PAGE}&start-index=${startIndex}&callback=loadPosts`;
+        document.body.appendChild(script);
+    }
+
+    /* 2. KONDISI UNTUK HALAMAN BACA ARTIKEL (POST) */
+    if (document.getElementById('content')) {
+        const script = document.createElement('script');
+        // PENGAMAN: Tetap tarik 100 data massal agar tombol next/prev di dalam artikel tidak patah
+        script.src = `https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost`;
+        document.body.appendChild(script);
+    }
+});
         /*
         INDEX PAGE
         */
