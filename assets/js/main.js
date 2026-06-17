@@ -250,6 +250,12 @@ function renderPost(data){
 ===================================== */
 
 function showSection(sectionId){
+    
+    // PENGAMAN: Jika sedang di halaman detail artikel (post.html), 
+    // matikan fungsi SPA agar perpindahan halaman esai tidak dipaksa kembali ke homepage
+    if (window.location.pathname.includes('post.html')) {
+        return; 
+    }
 
     document
         .querySelectorAll('.view-section')
@@ -281,7 +287,6 @@ function showSection(sectionId){
         behavior:'smooth'
     });
 }
-
 /* =====================================
    PAGE INIT (Hanya Ada Satu Listener DOM)
 ===================================== */
