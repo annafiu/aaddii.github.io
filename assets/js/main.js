@@ -176,6 +176,7 @@ function renderPost(data){
     const entries = data.feed.entry;
     let currentIndex = -1;
 
+    // 1. Cari tahu artikel aktif berada di index ke-berapa
     for(let i = 0; i < entries.length; i++){
         const alt = entries[i].link.find(l => l.rel === 'alternate');
         if(!alt) continue;
@@ -187,12 +188,14 @@ function renderPost(data){
         }
     }
 
+    // Jika artikel tidak ketemu di data JSON
     if(currentIndex === -1) {
         const titleElement = document.getElementById('title');
         if(titleElement) titleElement.innerHTML = 'Artikel tidak ditemukan';
         return;
     }
 
+    // 2. Ambil data artikel aktif berdasarkan index yang didapat
     const post = entries[currentIndex];
     const title = post.title.$t;
     let content = post.content ? post.content.$t : '';
@@ -214,6 +217,41 @@ function renderPost(data){
 
     content = content.replace(/<h1[^>]*>.*?<\/h1>/gis, '');
     contentElement.innerHTML = content;
+
+    // =====================================
+    // LOGIKA OTOMATIS TOMBOL NEXT & PREV (FIXED)
+    // =====================================
+    const nextButton = document.getElementById('next-btn');
+    const prevButton = document.getElementById('prev-btn');
+
+    // Mengikuti urutan data Blogger (0 = Paling Baru, entries.length - 1 = Paling Lama)
+    const nextIndex = currentIndex + 1; // Artikel berikutnya (lebih lama / angka index membesar)
+    const prevIndex = currentIndex - 1; // Artikel sebelumnya (lebih baru / angka index mengecil)
+
+    // 1. ATUR TOMBOL NEXT (Artikel Lebih Lama)
+    if (nextIndex < entries.length && nextButton) {
+        const nextAlt = entries[nextIndex].link.find(l => l.rel === 'alternate');
+        if (nextAlt) {
+            const nextSlug = nextAlt.href.split('/').pop().replace('.html', '');
+            nextButton.href = `post.html?slug=${nextSlug}`;
+            nextButton.style.display = 'inline-block';
+        }
+    } else if (nextButton) {
+        nextButton.style.display = 'none'; // Sembunyikan jika sudah di esai paling akhir (paling lama)
+    }
+
+    // 2. ATUR TOMBOL PREV (Artikel Lebih Baru)
+    if (prevIndex >= 0 && prevButton) {
+        const prevAlt = entries[prevIndex].link.find(l => l.rel === 'alternate');
+        if (prevAlt) {
+            const prevSlug = prevAlt.href.split('/').pop().replace('.html', '');
+            prevButton.href = `post.html?slug=${prevSlug}`;
+            prevButton.style.display = 'inline-block';
+        }
+    } else if (prevButton) {
+        prevButton.style.display = 'none'; // Sembunyikan jika sudah di esai paling awal (Latest Post)
+    }
+}
 
     // =====================================
     // LOGIKA OTOMATIS TOMBOL NEXT & PREV (PERBAIKAN SAKLEK)
