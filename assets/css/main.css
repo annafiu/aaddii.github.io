@@ -126,7 +126,7 @@
             color: var(--text-muted);
             display: flex;
             flex-direction: column;
-            gap: 0.25rem;
+            margin-top:2rem;
          margin-bottom: 2rem;
         }
 
@@ -252,7 +252,7 @@
         }
 
         .essay-header {
-            margin-bottom: 3.5rem;
+            margin-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 2rem;
         }
