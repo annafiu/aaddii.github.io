@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aaddii.com — Jurnal & Catatan Ruang</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABEL --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #faf9f6;       
+            --text-main: #111111;      
+            --text-muted: #6e6e6e;     
+            --border-color: #e8e6e0;   
+            
+            --font-serif: 'DM Serif Display', Georgia, serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Courier Prime', monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER & NAVIGASI UTAMA --- */
+        .site-header {
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: rgba(250, 249, 246, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .site-nav button {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-left: 2rem;
+            font-family: var(--font-mono);
+            transition: color 0.2s;
+        }
+
+        .site-nav button:hover, .site-nav button.active {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* --- LAYOUT UTAMA --- */
+        .container-main {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            min-height: 60vh;
+        }
+
+        /* --- HOMEPAGE / INDEKS --- */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active-view {
+            display: block;
+        }
+
+        .index-intro {
+            margin-bottom: 5rem;
+            max-width: 600px;
+        }
+
+        .manifesto {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .journal-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .journal-row {
+            display: none; /* Dikontrol via JavaScript Pagination */
+            grid-template-columns: 120px 1fr 100px; 
+            gap: 2rem;
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+            align-items: start;
+        }
+
+        .journal-row.visible-row {
+            display: grid;
+        }
+
+        .journal-row:last-of-type {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .journal-meta {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .journal-number {
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .journal-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .journal-title {
+            font-family: var(--font-serif);
+            font-size: 1.85rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .journal-link {
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            transition: color 0.2s ease;
+        }
+
+        .journal-link:hover {
+            color: var(--text-muted);
+        }
+
+        .journal-excerpt {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin-bottom: 0.75rem;
+        }
+
+        .journal-author {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .journal-thumbnail {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            opacity: 0.3; 
+            filter: grayscale(100%);
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .journal-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .journal-row:hover .journal-thumbnail {
+            opacity: 0.8;
+            filter: grayscale(0%);
+        }
+
+        /* --- HOMEPAGE PAGINATION (SESUAI GAMBAR) --- */
+        .homepage-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+        }
+
+        /* --- NAVIGASI BUTTONS (HOMEPAGE & IN-POST) --- */
+        .nav-simple-btn {
+            background: none;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .nav-simple-btn:hover:not(:disabled) {
+            color: var(--text-main);
+        }
+
+        .nav-simple-btn:disabled {
+            visibility: hidden; /* Elemen disembunyikan jika tidak ada page lagi agar space tetap rapi */
+        }
+
+        /* --- HALAMAN DETIL POSTINGAN (ESSAY VIEW) --- */
+        .essay-view {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            color: var(--text-main);
+        }
+
+        .essay-header {
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .essay-title-large {
+            font-family: var(--font-serif);
+            font-size: 2.6rem;
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .essay-body {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            line-height: 1.85;
+            color: #222;
+        }
+
+        .essay-body p {
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+
+        /* --- NAVIGASI DI DALAM POSTINGAN --- */
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* --- ABOUT VIEW --- */
+        .about-view {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* --- FOOTER --- */
+        .site-footer {
+            max-width: 1200px;
+            margin: 8rem auto 0 auto;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .journal-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 2rem 0;
+            }
+            .journal-meta { flex-direction: row; gap: 1rem; }
+            .journal-title { font-size: 1.5rem; }
+            .journal-thumbnail { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+            <h1 class="logo"><a href="#" onclick="showSection('index-view')">aaddii.com</a></h1>
+            <nav class="site-nav">
+                <button id="nav-index" class="active" onclick="showSection('index-view')">Indeks</button>
+                <button id="nav-about" onclick="showSection('about-view')">Tentang</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container-main">
+
+        <section id="index-view" class="view-section active-view">
+            <header class="index-intro">
+                <p class="manifesto">Kumpulan esai, catatan spekulatif, dan pembacaan kritis atas arsitektur, ruang, dan lanskap.</p>
+            </header>
+
+            <div class="journal-list" id="main-journal-list">
+                
+                <article class="journal-row" data-id="1">
+                    <div class="journal-meta"><span class="journal-number">#01</span><span class="journal-date">Juni 2026</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(1)">Menghuni Bayang-Bayang: Tipologi Beton Ekspos</button></h2>
+                        <p class="journal-excerpt">Sebuah pembacaan mengenai bagaimana gubahan massa menjorok ke dalam (indented) dan kisi-kisi vertikal mengoreografi cahaya alami.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+                <article class="journal-row" data-id="2">
+                    <div class="journal-meta"><span class="journal-number">#02</span><span class="journal-date">Mei 2026</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(2)">Tekstur yang Bertahan: Narasi Kayu Teak Kontemporer</button></h2>
+                        <p class="journal-excerpt">Catatan materialitas tentang bagaimana waktu bernegosiasi dengan permukaan kayu, menciptakan patina ruang.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+                <article class="journal-row" data-id="3">
+                    <div class="journal-meta"><span class="journal-number">#03</span><span class="journal-date">Maret 2026</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(3)">Analisis Spasial: Membongkar Batas Ruang Privat Kota</button></h2>
+                        <p class="journal-excerpt">Membahas konfigurasi koridor urban yang sempit, efisiensi unit fungsional, dan batas fisik sosial.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail" style="opacity:0;"></div>
+                </article>
+
+                <article class="journal-row" data-id="4">
+                    <div class="journal-meta"><span class="journal-number">#04</span><span class="journal-date">Februari 2026</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(4)">Siasat Skala: Fleksibilitas Hunian Mikro di Tapak Sempit</button></h2>
+                        <p class="journal-excerpt">Studi kasus pemanfaatan partisi modular untuk memperluas volume ruang secara psikologis.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+                <article class="journal-row" data-id="5">
+                    <div class="journal-meta"><span class="journal-number">#05</span><span class="journal-date">Januari 2026</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(5)">Klimatologi Komparatif: Atap Lindung vs Radiasi Tropis</button></h2>
+                        <p class="journal-excerpt">Mengevaluasi sudut kemiringan atap modern dalam menangani curah hujan ekstrem.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail" style="opacity:0;"></div>
+                </article>
+
+                <article class="journal-row" data-id="6">
+                    <div class="journal-meta"><span class="journal-number">#06</span><span class="journal-date">Desember 2025</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(6)">Tektonika Bambu: Menatap Masa Depan Material Berkelanjutan</button></h2>
+                        <p class="journal-excerpt">Eksplorasi sambungan mekanis pada material non-pejal untuk struktur bentang lebar.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+                <article class="journal-row" data-id="7">
+                    <div class="journal-meta"><span class="journal-number">#07</span><span class="journal-date">November 2025</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(7)">Alur dan Transisi: Koridor Logistik Kedai Kopi Urban</button></h2>
+                        <p class="journal-excerpt">Efisiensi sirkulasi pelayanan dalam area terbatas tanpa memotong alur sirkulasi pengunjung.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail" style="opacity:0;"></div>
+                </article>
+
+                <article class="journal-row" data-id="8">
+                    <div class="journal-meta"><span class="journal-number">#08</span><span class="journal-date">Oktober 2025</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(8)">Monokromatisme Alami: Karakter Batuan Lokal Jawa Tengah</button></h2>
+                        <p class="journal-excerpt">Aplikasi dan treatment khusus batu andesit mentah pada elemen lanskap eksterior.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+                <article class="journal-row" data-id="9">
+                    <div class="journal-meta"><span class="journal-number">#09</span><span class="journal-date">September 2025</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(9)">Kekosongan yang Padat: Filosofi Courtyard Rumah Kota</button></h2>
+                        <p class="journal-excerpt">Membawa ekosistem mikro ke dalam inti rumah sebagai generator penghawaan silang alami.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail" style="opacity:0;"></div>
+                </article>
+
+                <article class="journal-row" data-id="10">
+                    <div class="journal-meta"><span class="journal-number">#10</span><span class="journal-date">Agustus 2025</span></div>
+                    <div class="journal-content">
+                        <h2 class="journal-title"><button class="journal-link" onclick="openEssay(10)">Artikulasi Kusen Tipis: Batas Tipis Transparansi Ruang</button></h2>
+                        <p class="journal-excerpt">Bagaimana profil aluminium tipis mengubah persepsi ruang masif menjadi transparan.</p>
+                        <span class="journal-author">Farrij Tri Annafi'u</span>
+                    </div>
+                    <div class="journal-thumbnail"><img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=300&q=80"></div>
+                </article>
+
+            </div>
+
+            <nav class="homepage-pagination">
+                <button class="nav-simple-btn" id="btn-prev-page" onclick="changePage(-1)">← prev</button>
+                <button class="nav-simple-btn" id="btn-next-page" onclick="changePage(1)">next →</button>
+            </nav>
+        </section>
+
+        <section id="essay-view-container" class="view-section">
+            <div class="essay-view">
+                <button class="btn-back" onclick="showSection('index-view')">← Kembali ke Indeks</button>
+                
+                <article>
+                    <header class="essay-header">
+                        <div class="journal-meta">
+                            <span id="essay-dynamic-meta">Catatan Jurnal Ruang</span>
+                            <span>Oleh Farrij Tri Annafi'u</span>
+                        </div>
+                        <h2 class="essay-title-large" id="essay-dynamic-title">Judul Tulisan</h2>
+                    </header>
+                    <div class="essay-body">
+                        <p id="essay-dynamic-excerpt" style="font-style: italic; font-size: 1.3rem; margin-bottom: 2.5rem; color: var(--text-main);"></p>
+                        <p>Arsitektur selalu berinteraksi secara intim dengan lingkungan sekitarnya. Melalui eksplorasi gubahan ruang, penggunaan material fungsional kontemporer, dan penempatan bukaan yang presisi, sebuah bangunan tidak hanya berfungsi sebagai pelindung fisik melainkan juga sebagai medium estetika puitis yang merekam dinamika pergerakan cahaya sepanjang hari.</p>
+                        <p>Pembahasan lebih lanjut mengenai tipologi spasial ini menunjukkan bahwa efisiensi penataan layout interior dan transisi koridor luar memegang peranan krusial untuk menghasilkan kenyamanan psikologis yang optimal bagi para penghuninya di tengah padatnya lanskap perkotaan modern.</p>
+                    </div>
+                </article>
+
+                <nav class="post-navigation">
+                    <button class="nav-simple-btn" id="post-nav-prev" onclick="navigateToPost(-1)">← prev</button>
+                    <button class="nav-simple-btn" id="post-nav-next" onclick="navigateToPost(1)">next →</button>
+                </nav>
+            </div>
+        </section>
+
+        <section id="about-view" class="view-section">
+            <div class="about-view">
+                <header class="essay-header">
+                    <h2 class="essay-title-large">Tentang aaddii.com</h2>
+                </header>
+                <div class="essay-body">
+                    <p>Platform ini adalah jurnal terbuka yang berfokus pada kritik arsitektur, dokumentasi spasial, serta observasi materialitas dalam praktik perancangan lingkungan binaan modern.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 aaddii.com.</p>
+            <p>Indeks Jurnal Terbuka.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentPage = 1;
+        const postsPerPage = 5;
+        let currentActivePostId = null;
+        const totalPostsCount = 10;
+
+        // --- 1. LOGIKA PAGINATION HOMEPAGE ---
+        function updateHomepagePagination() {
+            const rows = document.querySelectorAll('#main-journal-list .journal-row');
+            const totalPages = Math.ceil(totalPostsCount / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+
+            rows.forEach((row, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    row.classList.add('visible-row');
+                } else {
+                    row.classList.remove('visible-row');
+                }
+            });
+
+            document.getElementById('btn-prev-page').disabled = (currentPage === 1);
+            document.getElementById('btn-next-page').disabled = (currentPage === totalPages);
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            updateHomepagePagination();
+            document.getElementById('main-journal-list').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- 2. LOGIKA NAVIGASI DI DALAM POSTINGAN ---
+        function openEssay(postId) {
+            currentActivePostId = parseInt(postId);
+            
+            const targetRow = document.querySelector(`.journal-row[data-id="${currentActivePostId}"]`);
+            const titleText = targetRow.querySelector('.journal-title button').innerText;
+            const metaText = targetRow.querySelector('.journal-meta').innerHTML.replace(/<br>|\n/g, ' — ');
+            const excerptText = targetRow.querySelector('.journal-excerpt').innerText;
+
+            document.getElementById('essay-dynamic-title').innerText = titleText;
+            document.getElementById('essay-dynamic-meta').innerHTML = metaText;
+            document.getElementById('essay-dynamic-excerpt').innerText = excerptText;
+
+            showSection('essay-view-container');
+            document.getElementById('nav-index').classList.remove('active');
+
+            // Atur status disabilitas tombol in-post
+            // Jika post paling atas (ID 1), tombol "next ->" dimatikan (karena tidak ada post yang lebih baru)
+            // Jika post paling bawah (ID 10), tombol "<- prev" dimatikan (karena tidak ada post yang lebih tua)
+            document.getElementById('post-nav-prev').disabled = (currentActivePostId === totalPostsCount); 
+            document.getElementById('post-nav-next').disabled = (currentActivePostId === 1); 
+        }
+
+        function navigateToPost(direction) {
+            // Karena urutan dari atas ke bawah (1 ke 10), direction -1 artinya ke post yang lebih baru (ID berkurang)
+            // dan direction +1 artinya ke post yang lebih lama (ID bertambah)
+            let nextPostId = currentActivePostId + direction;
+            
+            if (nextPostId >= 1 && nextPostId <= totalPostsCount) {
+                openEssay(nextPostId);
+            }
+        }
+
+        // --- 3. KONTROL TAMPILAN SEKSI UTAMA ---
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.view-section');
+            sections.forEach(sec => sec.classList.remove('active-view'));
+            
+            document.getElementById(sectionId).classList.add('active-view');
+
+            document.getElementById('nav-index').classList.remove('active');
+            document.getElementById('nav-about').classList.remove('active');
+            
+            if(sectionId === 'index-view') {
+                document.getElementById('nav-index').classList.add('active');
+                updateHomepagePagination();
+            } else if(sectionId === 'about-view') {
+                document.getElementById('nav-about').classList.add('active');
+            }
+
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateHomepagePagination();
+        });
+    </script>
+
+
+<script>
+const BLOGGER_FEED_URL = 'https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50&callback=loadPosts';
+
+function stripHtml(html){
+  const d=document.createElement('div');
+  d.innerHTML=html||'';
+  return d.textContent || d.innerText || '';
+}
+
+function loadPosts(data){
+  const container=document.getElementById('main-journal-list');
+  if(!container || !data.feed || !data.feed.entry) return;
+
+  const entries=data.feed.entry;
+  container.innerHTML='';
+
+  entries.forEach((post,index)=>{
+    const title=post.title.$t;
+    const content=post.content ? post.content.$t : '';
+    const excerpt=stripHtml(content).substring(0,180)+'...';
+
+    let link='#';
+    if(post.link){
+      const alt=post.link.find(l=>l.rel==='alternate');
+      if(alt) link=alt.href;
+    }
+
+    let thumb='';
+    const imgMatch=content.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if(imgMatch) thumb=imgMatch[1];
+
+    const dateObj=new Date(post.published.$t);
+    const dateText=dateObj.toLocaleDateString('id-ID',{month:'short',year:'numeric'});
+
+    const article=document.createElement('article');
+    article.className='journal-row visible-row';
+    article.innerHTML=`
+      <div class="journal-meta">
+        <span class="journal-number">#${String(index+1).padStart(2,'0')}</span>
+        <span class="journal-date">${dateText}</span>
+      </div>
+      <div class="journal-content">
+        <h2 class="journal-title"><a class="journal-link" href="${link}">${title}</a></h2>
+        <p class="journal-excerpt">${excerpt}</p>
+        <span class="journal-author">Farrij Tri Annafi'u</span>
+      </div>
+      <div class="journal-thumbnail">${thumb ? `<img src="${thumb}">` : ''}</div>
+    `;
+    container.appendChild(article);
+  });
+
+  const nav=document.querySelector('.homepage-pagination');
+  if(nav) nav.style.display='none';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const s=document.createElement('script');
+  s.src=BLOGGER_FEED_URL;
+  document.body.appendChild(s);
+});
+</script>
+
+</body>
+</html>
