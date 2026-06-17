@@ -619,11 +619,26 @@ function loadPosts(data){
     const content=post.content ? post.content.$t : '';
     const excerpt=stripHtml(content).substring(0,180)+'...';
 
-    let link='#';
-    if(post.link){
-      const alt=post.link.find(l=>l.rel==='alternate');
-      if(alt) link=alt.href;
-    }
+    let slug='';
+
+if(post.link){
+
+  const alt=
+      post.link.find(
+        l=>l.rel==='alternate'
+      );
+
+  if(alt){
+
+    slug=
+      alt.href
+      .split('/')
+      .pop()
+      .replace('.html','');
+
+  }
+
+}
 
     let thumb='';
     const imgMatch=content.match(/<img[^>]+src=["']([^"']+)["']/i);
@@ -640,7 +655,8 @@ function loadPosts(data){
         <span class="journal-date">${dateText}</span>
       </div>
       <div class="journal-content">
-        <h2 class="journal-title"><a class="journal-link" href="${link}">${title}</a></h2>
+        <h2 class="journal-title"><a class="journal-link"
+   href="post.html?slug=${slug}">${title}</a></h2>
         <p class="journal-excerpt">${excerpt}</p>
         <span class="journal-author">Farrij Tri Annafi'u</span>
       </div>
