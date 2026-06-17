@@ -109,9 +109,10 @@ h1{
     color:var(--text-muted);
     font-size:.85rem;
 }
+
 </style>
 </head>
-<body>
+    <body>
 
 <div class="article-container">
 
@@ -122,6 +123,52 @@ h1{
 <h1 id="title">Loading...</h1>
 
 <div id="content"></div>
+<script>
+
+function getSlug(){
+    const url=new URLSearchParams(window.location.search);
+    return url.get('slug');
+}
+
+function renderPost(data){
+
+    const slug=getSlug();
+
+    const entries=data.feed.entry;
+
+    for(const post of entries){
+
+        const alt=post.link.find(
+            l => l.rel === 'alternate'
+        );
+
+        const postSlug=
+            alt.href
+            .split('/')
+            .pop()
+            .replace('.html','');
+
+        if(postSlug===slug){
+
+            document.title=post.title.$t;
+
+            document.getElementById('title')
+                .innerHTML=post.title.$t;
+
+            document.getElementById('content')
+                .innerHTML=post.content.$t;
+
+            return;
+        }
+    }
+
+    document.getElementById('title')
+        .innerHTML='Artikel tidak ditemukan';
+}
+
+</script>
+
+<script src="https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost"></script>
 
 <div class="article-footer">
     aaddii.com — Jurnal & Catatan Ruang
