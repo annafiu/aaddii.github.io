@@ -188,8 +188,8 @@ function renderPost(data){
     const nextButton = document.getElementById('next-btn');
     const prevButton = document.getElementById('prev-btn');
 
-    const nextIndex = currentIndex + 1; // Artikel berikutnya (lebih lama)
-    const prevIndex = currentIndex - 1; // Artikel sebelumnya (lebih baru)
+    const nextIndex = currentIndex - 1; // Artikel berikutnya (lebih lama)
+    const prevIndex = currentIndex + 1; // Artikel sebelumnya (lebih baru)
 
     // Set Link Otomatis untuk NEXT
     if (nextIndex < entries.length && nextButton) {
