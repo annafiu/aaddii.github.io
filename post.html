@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Loading...</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    max-width:800px;
+    margin:80px auto;
+    padding:0 24px;
+    font-family:Inter,sans-serif;
+}
+
+h1{
+    font-family:"DM Serif Display",serif;
+    font-size:3rem;
+    margin-bottom:2rem;
+}
+
+#content{
+    line-height:1.8;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+.back{
+    display:inline-block;
+    margin-bottom:40px;
+}
+
+</style>
+</head>
+<body>
+
+<a class="back" href="/">← Kembali</a>
+
+<h1 id="title">Loading...</h1>
+
+<div id="content"></div>
+
+<script>
+
+function getSlug(){
+    const url=new URLSearchParams(window.location.search);
+    return url.get('slug');
+}
+
+function renderPost(data){
+
+    const slug=getSlug();
+
+    const entries=data.feed.entry;
+
+    for(const post of entries){
+
+        const alt=post.link.find(
+            l => l.rel === 'alternate'
+        );
+
+        const postSlug=
+            alt.href
+            .split('/')
+            .pop()
+            .replace('.html','');
+
+        if(postSlug===slug){
+
+            document.title=post.title.$t;
+
+            document.getElementById('title')
+                .innerHTML=post.title.$t;
+
+            document.getElementById('content')
+                .innerHTML=post.content.$t;
+
+            return;
+        }
+    }
+
+    document.getElementById('title')
+        .innerHTML='Artikel tidak ditemukan';
+}
+
+</script>
+
+<script src="https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost"></script>
+
+</body>
+</html>
