@@ -101,7 +101,7 @@ function loadPosts(data){
         article.innerHTML=`
             <div class="journal-meta">
                 <span class="journal-number">
-                    #${String(index+1).padStart(2,'0')}
+                    #${String(articles.length - index).padStart(2, '0')}
                 </span>
 
                 <span class="journal-date">
