@@ -251,6 +251,8 @@ function renderPost(data){
     } else if (nextButton) {
         nextButton.style.display = 'none'; // Sembunyikan jika berada di postingan paling lama
     }
+} // <--- TANDA INI YANG KEMARIN HILANG (MENUTUP RENDERPOST DENGAN SEMPURNA)
+
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
 ===================================== */
