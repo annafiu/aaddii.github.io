@@ -101,7 +101,7 @@ function loadPosts(data){
         article.innerHTML=`
             <div class="journal-meta">
                 <span class="journal-number">
-                    #${String(articles.length - index).padStart(2, '0')}
+                    #${String(entries.length - index).padStart(2, '0')}
                 </span>
 
                 <span class="journal-date">
@@ -151,101 +151,90 @@ function loadPosts(data){
 
 function renderPost(data){
 
-    const contentElement=
-        document.getElementById('content');
-
+    const contentElement = document.getElementById('content');
     if(!contentElement) return;
 
-    const slug=getSlug();
-
+    const slug = getSlug();
     if(!slug) return;
 
     if(!data.feed || !data.feed.entry) return;
 
-    const entries=data.feed.entry;
+    const entries = data.feed.entry;
 
-    for(const post of entries){
+    // Tambahkan variabel pembantu untuk mencari index artikel aktif
+    let currentIndex = -1;
 
-        const alt=
-            post.link.find(
-                l => l.rel==='alternate'
-            );
-
+    // 1. Loop pertama: Cari tahu artikel aktif berada di index ke-berapa
+    for(let i = 0; i < entries.length; i++){
+        const alt = entries[i].link.find(l => l.rel === 'alternate');
         if(!alt) continue;
 
-        const postSlug=
-            alt.href
-            .split('/')
-            .pop()
-            .replace('.html','');
-
-        if(postSlug!==slug) continue;
-
-        const title=post.title.$t;
-
-        let content=
-            post.content
-            ? post.content.$t
-            : '';
-
-        const plainText=
-            stripHtml(content);
-
-        const excerpt=
-            plainText.substring(0,220) + '...';
-
-        const dateObj=
-            new Date(post.published.$t);
-
-        const dateText=
-            dateObj.toLocaleDateString(
-                'id-ID',
-                {
-                    day:'numeric',
-                    month:'long',
-                    year:'numeric'
-                }
-            );
-
-        document.title=title;
-
-        const titleElement=
-            document.getElementById('title');
-
-        if(titleElement){
-            titleElement.innerHTML=title;
+        const postSlug = alt.href.split('/').pop().replace('.html','');
+        if(postSlug === slug) {
+            currentIndex = i;
+            break;
         }
+    }
 
-        const dateElement=
-            document.getElementById('article-date');
-
-        if(dateElement){
-            dateElement.innerHTML=dateText;
-        }
-
-        const excerptElement=
-            document.getElementById('excerpt');
-
-        if(excerptElement){
-            excerptElement.innerText=excerpt;
-        }
-
-        content = content.replace(
-            /<h1[^>]*>.*?<\/h1>/gis,
-            ''
-        );
-
-        contentElement.innerHTML=content;
-
+    // Jika artikel tidak ketemu di data JSON
+    if(currentIndex === -1) {
+        const titleElement = document.getElementById('title');
+        if(titleElement) titleElement.innerHTML = 'Artikel tidak ditemukan';
         return;
     }
 
-    const titleElement=
-        document.getElementById('title');
+    // 2. Ambil data artikel aktif berdasarkan index yang didapat
+    const post = entries[currentIndex];
+    const title = post.title.$t;
+    let content = post.content ? post.content.$t : '';
+    const plainText = stripHtml(content);
+    const excerpt = plainText.substring(0,220) + '...';
+    const dateObj = new Date(post.published.$t);
+    const dateText = dateObj.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
 
-    if(titleElement){
-        titleElement.innerHTML=
-            'Artikel tidak ditemukan';
+    document.title = title;
+
+    const titleElement = document.getElementById('title');
+    if(titleElement) titleElement.innerHTML = title;
+
+    const dateElement = document.getElementById('article-date');
+    if(dateElement) dateElement.innerHTML = dateText;
+
+    const excerptElement = document.getElementById('excerpt');
+    if(excerptElement) excerptElement.innerText = excerpt;
+
+    content = content.replace(/<h1[^>]*>.*?<\/h1>/gis, '');
+    contentElement.innerHTML = content;
+
+    // =====================================
+    // LOGIKA OTOMATIS TOMBOL NEXT & PREV
+    // =====================================
+    const nextButton = document.getElementById('next-btn');
+    const prevButton = document.getElementById('prev-btn');
+
+    const nextIndex = currentIndex + 1; // Artikel berikutnya (lebih lama)
+    const prevIndex = currentIndex - 1; // Artikel sebelumnya (lebih baru)
+
+    // Set Link Otomatis untuk NEXT
+    if (nextIndex < entries.length && nextButton) {
+        const nextAlt = entries[nextIndex].link.find(l => l.rel === 'alternate');
+        if(nextAlt) {
+            const nextSlug = nextAlt.href.split('/').pop().replace('.html','');
+            nextButton.href = `post.html?slug=${nextSlug}`;
+        }
+    } else if (nextButton) {
+        nextButton.style.display = 'none'; // Sembunyikan jika artikel paling akhir
+    }
+
+    // Set Link Otomatis untuk PREV
+    if (prevIndex >= 0 && prevButton) {
+        const prevAlt = entries[prevIndex].link.find(l => l.rel === 'alternate');
+        if(prevAlt) {
+            const prevSlug = prevAlt.href.split('/').pop().replace('.html','');
+            prevButton.href = `post.html?slug=${prevSlug}`;
+        }
+    } else if (prevButton) {
+        prevButton.style.display = 'none'; // Sembunyikan jika artikel paling baru
     }
 }
 
