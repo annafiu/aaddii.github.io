@@ -115,13 +115,13 @@
         }
 
         .journal-row {
-            display: none; /* Dikontrol via JavaScript Pagination */
-            grid-template-columns: 120px 1fr 100px; 
-            gap: 2rem;
-            padding: 2.5rem 0;
-            border-top: 1px solid var(--border-color);
-            align-items: start;
-        }
+    display:grid;
+    grid-template-columns:120px 1fr 100px;
+    gap:2rem;
+    padding:2.5rem 0;
+    border-top:1px solid var(--border-color);
+    align-items:start;
+}
 
         .journal-row.visible-row {
             display: grid;
@@ -389,27 +389,34 @@
     
     <script>
         function showSection(sectionId) {
-            const sections = document.querySelectorAll('.view-section');
-            sections.forEach(sec => sec.classList.remove('active-view'));
-            
-            document.getElementById(sectionId).classList.add('active-view');
 
-            document.getElementById('nav-index').classList.remove('active');
-            document.getElementById('nav-about').classList.remove('active');
-            
-            if(sectionId === 'index-view') {
-                document.getElementById('nav-index').classList.add('active');
-                updateHomepagePagination();
-            } else if(sectionId === 'about-view') {
-                document.getElementById('nav-about').classList.add('active');
-            }
+    document.querySelectorAll('.view-section')
+        .forEach(sec => sec.classList.remove('active-view'));
 
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
+    document.getElementById(sectionId)
+        .classList.add('active-view');
 
-        document.addEventListener("DOMContentLoaded", function() {
-            updateHomepagePagination();
-        });
+    document.getElementById('nav-index')
+        .classList.remove('active');
+
+    document.getElementById('nav-about')
+        .classList.remove('active');
+
+    if(sectionId === 'index-view'){
+        document.getElementById('nav-index')
+            .classList.add('active');
+    }
+
+    if(sectionId === 'about-view'){
+        document.getElementById('nav-about')
+            .classList.add('active');
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
     </script>
 <script>
 const BLOGGER_FEED_URL = 'https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50&callback=loadPosts';
@@ -422,6 +429,7 @@ function stripHtml(html){
 
 function loadPosts(data){
   const container=document.getElementById('main-journal-list');
+    container.innerHTML='';
   if(!container || !data.feed || !data.feed.entry) return;
 
   const entries=data.feed.entry;
