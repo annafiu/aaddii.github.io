@@ -1,4 +1,4 @@
-        function showSection(sectionId) {
+function showSection(sectionId) {
 
     document.querySelectorAll('.view-section')
         .forEach(sec => sec.classList.remove('active-view'));
@@ -27,7 +27,8 @@
         behavior:'smooth'
     });
 }
-
+    </script>
+<script>
 const BLOGGER_FEED_URL = 'https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=50&callback=loadPosts';
 
 function stripHtml(html){
@@ -80,7 +81,17 @@ if(post.link){
     const article=document.createElement('article');
     article.className='journal-row visible-row';
     article.innerHTML=`
-      
+      <div class="journal-meta">
+        <span class="journal-number">#${String(index+1).padStart(2,'0')}</span>
+        <span class="journal-date">${dateText}</span>
+      </div>
+      <div class="journal-content">
+        <h2 class="journal-title"><a class="journal-link"
+   href="post.html?slug=${slug}">${title}</a></h2>
+        <p class="journal-excerpt">${excerpt}</p>
+        <span class="journal-author">Farrij Tri Annafi'u</span>
+      </div>
+      <div class="journal-thumbnail">${thumb ? `<img src="${thumb}">` : ''}</div>
     `;
     container.appendChild(article);
   });
@@ -94,86 +105,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   s.src=BLOGGER_FEED_URL;
   document.body.appendChild(s);
 });
-function getSlug(){
-    const url = new URLSearchParams(window.location.search);
-    return url.get('slug');
-}
 
-function stripHtml(html){
-    const div=document.createElement('div');
-    div.innerHTML=html;
-    return div.textContent || div.innerText || '';
-}
-
-function renderPost(data){
-
-    const slug=getSlug();
-
-    if(!data.feed || !data.feed.entry) return;
-
-    const entries=data.feed.entry;
-
-    for(const post of entries){
-
-        const alt=post.link.find(
-            l => l.rel === 'alternate'
-        );
-
-        if(!alt) continue;
-
-        const postSlug=
-            alt.href
-            .split('/')
-            .pop()
-            .replace('.html','');
-
-        if(postSlug===slug){
-
-            const title=post.title.$t;
-            let content=post.content ? post.content.$t : '';
-
-            const plainText=stripHtml(content);
-
-            const excerpt=
-                plainText.substring(0,220) + '...';
-
-            const dateObj=
-                new Date(post.published.$t);
-
-            const dateText=
-                dateObj.toLocaleDateString(
-                    'id-ID',
-                    {
-                        day:'numeric',
-                        month:'long',
-                        year:'numeric'
-                    }
-                );
-
-            document.title=title;
-
-            document.getElementById('title')
-                .innerHTML=title;
-
-            document.getElementById('article-date')
-                .innerHTML=dateText;
-
-            document.getElementById('excerpt')
-                .innerText=excerpt;
-
-            content = content.replace(
-                /<h1[^>]*>.*?<\/h1>/gis,
-                ''
-            );
-
-            document.getElementById('content')
-                .innerHTML=content;
-
-            return;
-        }
-    }
-
-    document.getElementById('title')
-        .innerHTML='Artikel tidak ditemukan';
-
-}
