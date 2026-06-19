@@ -338,24 +338,45 @@ function showSection(sectionId){
 }
 
 /* ========================================================
-   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR
+   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR (ENHANCED)
 ======================================================== */
 window.addEventListener('message', (event) => {
-    if (event.origin === 'https://cusdis.com' && event.data) {
+    // Membuka celah pengecekan data pesan dari Cusdis
+    if (event.data) {
         try {
-            const data = JSON.parse(event.data);
+            // Beberapa versi iframe mengirimkan object, sebagian mengirimkan JSON string
+            const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+            
+            // Tangkap event resize bawaan widget Cusdis
             if (data.type === 'resize' && data.height) {
                 const cusdisIframe = document.querySelector('#cusdis_thread iframe');
                 if (cusdisIframe) {
-                    // Menyuntikkan tinggi dinamis baru langsung ke element style iframe induk
-                    cusdisIframe.style.setProperty('height', `${data.height + 24}px`, 'important');
+                    // Berikan padding ekstra 40px agar bagian bawah komentar tidak mepet
+                    cusdisIframe.style.setProperty('height', `${data.height + 40}px`, 'important');
                 }
             }
         } catch (e) {
-            // Passthrough non-json data safely
+            // Gagal parsing jika string biasa, abaikan aman
         }
     }
 });
+
+/* FALLBACK INTERVENSAL: Jika skrip event di atas diblokir browser, 
+   kita cek berkala tinggi DOM asli di dalam iframe setiap 1.5 detik */
+setInterval(() => {
+    const cusdisIframe = document.querySelector('#cusdis_thread iframe');
+    if (cusdisIframe && cusdisIframe.contentWindow) {
+        try {
+            // Hanya bekerja sempurna jika document internal bisa diakses (same-origin/shadow-root)
+            const internalHeight = cusdisIframe.contentWindow.document.body.scrollHeight;
+            if (internalHeight && internalHeight > 150) {
+                cusdisIframe.style.setProperty('height', `${internalHeight + 20}px`, 'important');
+            }
+        } catch (e) {
+            // Tertahan CORS jika cross-origin total, penanganan diserahkan kembali ke event listener di atas
+        }
+    }
+}, 1500);
 
 /* =====================================
    PAGE INIT
