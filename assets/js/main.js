@@ -273,7 +273,7 @@ function renderPost(data){
     }
 
     // =====================================
-    // INTEGRASI DINAMIS KOMENTAR CUSDIS (FIXED NO-SCROLL)
+    // INTEGRASI DINAMIS KOMENTAR CUSDIS (PERBAIKAN TOTAL NO-SCROLL)
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
@@ -284,8 +284,23 @@ function renderPost(data){
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
         
-        // SOLUSI NO-SCROLL: Mengaktifkan fungsi sinkronisasi tinggi otomatis dari Cusdis
+        // Mengaktifkan fitur auto height bawaan Cusdis
         cusdisThread.setAttribute('data-iframe-auto-height', 'true');
+
+        // JINAKKAN SCROLLBAR: Gunakan MutationObserver untuk memantau kapan iframe disuntikkan ke DOM
+        const observer = new MutationObserver((mutations, obs) => {
+            const iframe = cusdisThread.querySelector('iframe');
+            if (iframe) {
+                // Begitu iframe ditemukan, kunci gayanya secara paksa menggunakan inline style
+                iframe.style.setProperty('overflow', 'hidden', 'important');
+                iframe.style.setProperty('height', '100%', 'important');
+                iframe.setAttribute('scrolling', 'no'); // Atribut HTML jadul tapi sangat ampuh mematikan scrollbar
+                obs.disconnect(); // Hentikan pemantauan karena target sudah dieksekusi
+            }
+        });
+
+        // Mulai memantau perubahan di dalam elemen #cusdis_thread
+        observer.observe(cusdisThread, { childList: true, subtree: true });
 
         // Jika script Cusdis belum terpasang di halaman, muat secara asinkron
         if (!document.getElementById('cusdis-script')) {
@@ -296,13 +311,13 @@ function renderPost(data){
             script.src = 'https://cusdis.com/js/cusdis.es.js';
             document.body.appendChild(script);
         } else {
-            // Jika script sudah ada (pindah dari artikel lain), perintahkan Cusdis merender ulang komentar baru
+            // Jika script sudah ada, perintahkan Cusdis merender ulang
             if (window.CUSDIS && typeof window.CUSDIS.renderDoc === 'function') {
                 window.CUSDIS.renderDoc(cusdisThread);
             }
         }
     }
-} // <-- DISINI TADI BREAKPOINT YANG HILANG (SUDAH DIKEMBALIKAN)
+} 
 
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
