@@ -341,8 +341,8 @@ function showSection(sectionId){
 }
 
 /* ========================================================
-   MEDIUM.COM STYLE IMAGE ZOOM OVERLAY (PERFECT TRANSITION)
-======================================================== */
+   MEDIUM.COM STYLE IMAGE ZOOM OVERLAY (PERFECT MATCH)
+======================================================= */
 function initImageZoom() {
     const articleImages = document.querySelectorAll('#content img');
     
@@ -364,49 +364,47 @@ function initImageZoom() {
             overlay.appendChild(zoomedImg);
             document.body.appendChild(overlay);
             
-            // Masuk mode zoom (Fade In & Scale Up)
+            // Simpan koordinat scroll awal saat gambar diklik
+            const initialScrollY = window.scrollY;
+            
+            // Masuk mode zoom
             setTimeout(() => {
                 overlay.classList.add('active');
-                // LOCK SCROLL: Kunci scroll halaman utama agar tidak bergerak saat di-zoom
-                document.body.style.overflow = 'hidden';
             }, 10);
             
-            // Fungsi Inti untuk menutup gambar (Zoom Out dulu baru buka scroll)
+            // Fungsi menutup gambar (Zoom Out)
             let isClosing = false;
             function closeZoom() {
                 if (isClosing) return;
                 isClosing = true;
                 
-                // Mulai animasi zoom out (kembali ke normal)
                 overlay.classList.remove('active');
                 
-                // Cabut semua event detektor agar memori kembali bersih
-                window.removeEventListener('wheel', handleScrollAttempt);
-                window.removeEventListener('touchmove', handleScrollAttempt);
+                // Cabut event listener agar tidak membebani memori browser
+                window.removeEventListener('scroll', handleScrollClose);
                 
-                // Tunggu sampai animasi CSS mengecil selesai (300ms)
                 setTimeout(() => {
-                    // UNLOCK SCROLL: Kembalikan fungsi scroll halaman utama
-                    document.body.style.overflow = '';
                     overlay.remove();
-                }, 300); // Harus sinkron dengan durasi transisi di CSS (0.3s)
+                }, 300); // Sinkron dengan durasi transisi di CSS (0.3s)
             }
             
-            // Fungsi interseptor untuk mendeteksi jika user mencoba scroll
-            function handleScrollAttempt(event) {
-                // Tahan/blokir gerakan scroll bawaan browser saat gambar masih membesar
-                event.preventDefault(); 
-                // Jalankan proses zoom out terlebih dahulu
-                closeZoom();
+            // FITUR UTAMA: Deteksi pergerakan scroll halaman secara natural
+            function handleScrollClose() {
+                // Hitung seberapa jauh user melakukan scroll dari posisi awal
+                const scrollDelta = Math.abs(window.scrollY - initialScrollY);
+                
+                // Jika user melakukan scroll lebih dari 20 pixel, jalankan efek zoom out secara halus
+                if (scrollDelta > 20) {
+                    closeZoom();
+                }
             }
             
             // A. Klik pada gambar atau area kosong untuk menutup normal
             overlay.addEventListener('click', closeZoom);
             
-            // B. Deteksi usaha scroll (Roda mouse / Trackpad / Swipe Layar HP)
-            // Kita gunakan { passive: false } agar browser mengizinkan perintah event.preventDefault()
-            window.addEventListener('wheel', handleScrollAttempt, { passive: false });
-            window.addEventListener('touchmove', handleScrollAttempt, { passive: false });
+            // B. Deteksi scroll natural (Tanpa mengunci halaman, persis seperti di video Medium)
+            // Menggunakan { passive: true } agar scroll bawaan browser berjalan super lancar tanpa hambatan
+            window.addEventListener('scroll', handleScrollClose, { passive: true });
         });
     });
 }
