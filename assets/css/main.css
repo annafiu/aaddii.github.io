@@ -494,3 +494,22 @@
 #cusdis_thread {
     font-family: inherit !important; /* Memaksa font meniru sans-serif bawaan web kamu */
 }
+
+/* =====================================
+   FIXED CUSDIS NO-SCROLL & AUTOFIT
+===================================== */
+
+/* Pastikan elemen utama tidak membatasi tinggi */
+#cusdis_thread {
+    min-height: 200px; /* Batas minimum awal saat form kosong */
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Memaksa elemen Iframe di dalamnya mengikuti tinggi asli konten tanpa scrollbar */
+#cusdis_thread iframe {
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important; /* Menghilangkan scrollbar internal iframe */
+    display: block;
+}
