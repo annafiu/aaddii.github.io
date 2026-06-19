@@ -518,3 +518,40 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
         display: none; 
     }
 }
+/* ========================================================
+   MEDIUM.COM IMAGE ZOOM EFFECT STYLES
+======================================================== */
+
+.image-zoom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(250, 249, 246, 0.95); /* Tone krem khas web Anda */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    cursor: zoom-out;
+    /* Menggunakan transition 'all' agar perubahan opacity dan transform menutup serentak */
+    transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1); 
+}
+
+.image-zoom-overlay img.image-zoomed {
+    max-width: 90%;
+    max-height: 85%;
+    object-fit: contain;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.image-zoom-overlay.active {
+    opacity: 1;
+}
+
+.image-zoom-overlay.active img.image-zoomed {
+    transform: scale(1);
+}
