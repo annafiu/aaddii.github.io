@@ -244,7 +244,7 @@ function renderPost(data){
             prevButton.style.visibility = 'visible'; 
         }
     } else if (prevButton) {
-        prevButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak posisi tombol kanan
+        prevButton.style.visibility = 'hidden'; 
     }
 
     // 2. ATUR TOMBOL KANAN (NEXT - Artikel Lebih Lama)
@@ -256,7 +256,35 @@ function renderPost(data){
             nextButton.style.visibility = 'visible';
         }
     } else if (nextButton) {
-        nextButton.style.visibility = 'hidden'; // Mengosongkan ruang tanpa merusak posisi tombol kiri
+        nextButton.style.visibility = 'hidden'; 
+    }
+
+    // =====================================
+    // INTEGRASI DINAMIS KOMENTAR CUSDIS
+    // =====================================
+    const cusdisThread = document.getElementById('cusdis_thread');
+    if (cusdisThread) {
+        // Set data identitas artikel secara dinamis ke elemen wadah
+        cusdisThread.setAttribute('data-host', 'https://cusdis.com');
+        cusdisThread.setAttribute('data-app-id', '81ea97a7-cb6d-4a6a-97f9-a7afe09ff5dd');
+        cusdisThread.setAttribute('data-page-id', slug); 
+        cusdisThread.setAttribute('data-page-url', window.location.href);
+        cusdisThread.setAttribute('data-page-title', title);
+
+        // Jika script Cusdis belum terpasang di halaman, muat secara asinkron
+        if (!document.getElementById('cusdis-script')) {
+            const script = document.createElement('script');
+            script.id = 'cusdis-script';
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://cusdis.com/js/cusdis.es.js';
+            document.body.appendChild(script);
+        } else {
+            // Jika script sudah ada (pindah dari artikel lain), perintahkan Cusdis merender ulang komentar baru
+            if (window.CUSDIS && typeof window.CUSDIS.renderDoc === 'function') {
+                window.CUSDIS.renderDoc(cusdisThread);
+            }
+        }
     }
 } 
 
@@ -266,18 +294,15 @@ function renderPost(data){
 
 function showSection(sectionId){
     
-    // PENGAMAN 1: Jika berada di halaman post.html, stop fungsi SPA!
     if (window.location.pathname.includes('post.html')) {
         return; 
     }
 
-    // PENGAMAN 2: Cek apakah kontainer list jurnal utama ada di halaman ini.
     const isHomepage = document.getElementById('main-journal-list');
     if (!isHomepage) {
         return; 
     }
 
-    // --- KODE SPA JIKA SEDANG DI BERANDA ---
     document
         .querySelectorAll('.view-section')
         .forEach(
@@ -299,11 +324,9 @@ function showSection(sectionId){
         navIndex.classList.add('active');
     }
 
-    // MEMBERSIHKAN PAGINATION SAAT MENU "TENTANG" DIKLIK
     if(sectionId==='about-view' && navAbout){
         navAbout.classList.add('active');
         
-        // Cari kontainer pagination dan hapus isinya seketika
         const pgContainer = document.getElementById('numeric-pagination');
         if(pgContainer) {
             pgContainer.innerHTML = '';
