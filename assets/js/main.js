@@ -260,7 +260,7 @@ function renderPost(data){
     }
 
     // =====================================
-    // INTEGRASI DINAMIS KOMENTAR CUSDIS
+    // INTEGRASI DINAMIS KOMENTAR CUSDIS (FIXED NO-SCROLL)
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
@@ -270,6 +270,9 @@ function renderPost(data){
         cusdisThread.setAttribute('data-page-id', slug); 
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
+        
+        // SOLUSI NO-SCROLL: Mengaktifkan fungsi sinkronisasi tinggi otomatis dari Cusdis
+        cusdisThread.setAttribute('data-iframe-auto-height', 'true');
 
         // Jika script Cusdis belum terpasang di halaman, muat secara asinkron
         if (!document.getElementById('cusdis-script')) {
@@ -286,7 +289,6 @@ function renderPost(data){
             }
         }
     }
-} 
 
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
