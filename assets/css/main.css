@@ -1,406 +1,403 @@
- /* --- RESET & VARIABEL --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-color: #faf9f6;       
-            --text-main: #111111;      
-            --text-muted: #6e6e6e;     
-            --border-color: #e8e6e0;   
-            
-            --font-sans: 'Inter', sans-serif;
-            --font-mono: 'Courier Prime', monospace;
-            --sans: 'DM Sans', sans-serif;
-            --serif: 'DM Serif Display', serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* --- HEADER & NAVIGASI UTAMA --- */
-        .site-header {
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background-color: rgba(250, 249, 246, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo a {
-            font-family: var(--font-sans);
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-main);
-            text-decoration: none;
-            letter-spacing: -0.02em;
-        }
-
-        .site-nav button {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            margin-left: 2rem;
-            font-family: var(--font-mono);
-            transition: color 0.2s;
-        }
-
-        .site-nav button:hover, .site-nav button.active {
-            color: var(--text-main);
-            font-weight: 500;
-        }
-
-        /* --- LAYOUT UTAMA --- */
-        .container-main {
-            max-width: 1000px;
-            margin: 1.5rem auto;
-            padding: 0 2rem;
-        }
-
-        /* --- HOMEPAGE / INDEKS --- */
-        .view-section {
-            display: none;
-        }
-
-        .view-section.active-view {
-            display: block;
-        }
-
-        .index-intro {
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-        }
-
-        .manifesto {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            font-weight: 300;
-            line-height: 1.5;
-        }
-
-        .journal-list {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .journal-row {
-    display:grid;
-    grid-template-columns:120px 1fr 100px;
-    gap:2rem;
-    padding:2.5rem 0;
-    border-top:1px solid var(--border-color);
-    align-items:start;
+/* --- RESET & VARIABEL --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-        .journal-row.visible-row {
-            display: grid;
-        }
-
-        .journal-row:last-of-type {
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .journal-meta {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            flex-direction: column;
-            margin-top:2rem;
-         margin-bottom: 2rem;
-        }
-
-        .journal-number {
-            color: var(--text-main);
-            font-weight: bold;
-        }
-
-        .journal-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .journal-title {
-            font-family: var(--font-serif);
-            font-size: 1.85rem;
-            font-weight: 400;
-            line-height: 1.2;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.01em;
-        }
-
-        .journal-link {
-            color: var(--text-main);
-            text-decoration: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            text-align: left;
-            font-family: inherit;
-            font-size: inherit;
-            line-height: inherit;
-            transition: color 0.2s ease;
-        }
-
-        .journal-link:hover {
-            color: var(--text-muted);
-        }
-
-        .journal-excerpt {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            max-width: 680px;
-            margin-bottom: 0.75rem;
-        }
-
-        .journal-author {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .journal-thumbnail {
-            width: 100px;
-            height: 100px;
-            overflow: hidden;
-            opacity: 0.3; 
-            filter: grayscale(100%);
-            transition: opacity 0.3s ease, filter 0.3s ease;
-            border: 1px solid #878787
-        }
-
-        .journal-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .journal-row:hover .journal-thumbnail {
-            opacity: 0.8;
-            filter: grayscale(0%);
-        }
-
-        /* --- HOMEPAGE PAGINATION (SESUAI GAMBAR) --- */
-        .homepage-pagination {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 3.5rem;
-            padding-top: 2rem;
-        }
-
-        /* --- NAVIGASI BUTTONS (HOMEPAGE & IN-POST) --- */
-        .nav-simple-btn {
-            background: none;
-            border: none;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .nav-simple-btn:hover:not(:disabled) {
-            color: var(--text-main);
-        }
-
-        .nav-simple-btn:disabled {
-            visibility: hidden; /* Elemen disembunyikan jika tidak ada page lagi agar space tetap rapi */
-        }
-
-        /* --- HALAMAN DETIL POSTINGAN (ESSAY VIEW) --- */
-        .essay-view {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-
-        .btn-back {
-            background: none;
-            border: none;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-back:hover {
-            color: var(--text-main);
-        }
-
-        .essay-header {
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 2rem;
-        }
-
-        .essay-title-large {
-            font-family: var(--font-serif);
-            font-size: 2.6rem;
-            font-weight: 400;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
-            margin-top: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .essay-body {
-            font-family: var(--font-serif);
-            font-size: 1.15rem;
-            line-height: 1.85;
-            color: #222;
-        }
-
-        .essay-body p {
-            margin-bottom: 2rem;
-            text-align: justify;
-        }
-
-        /* --- NAVIGASI DI DALAM POSTINGAN --- */
-        .post-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* --- ABOUT VIEW --- */
-        .about-view {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-
-        /* --- FOOTER --- */
-        .site-footer {
-            max-width: 1200px;
-            margin: 8rem auto 0 auto;
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border-color);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .footer-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        @media (max-width: 768px) {
-            .journal-row {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-                padding: 2rem 0;
-            }
-            .journal-meta { flex-direction: row; gap: 1rem; }
-            .journal-title { font-size: 1.5rem; }
-            .journal-thumbnail { display: none; }
-        }
-.article-container{
-    max-width:760px;
-    margin:60px auto 80px;
-    padding:0 32px;
+:root {
+    --bg-color: #faf9f6;       
+    --text-main: #111111;      
+    --text-muted: #6e6e6e;     
+    --border-color: #e8e6e0;   
+    
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'Courier Prime', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --serif: 'DM Serif Display', serif;
 }
 
-#content{
-    font-family:var(--sans);
-    font-size:15px;
-    font-weight:300;
-    line-height:1.85;
-    color:var(--text-main);
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-#content img{
-    width:100%;
-    height:auto;
+/* --- HEADER & NAVIGASI UTAMA --- */
+.site-header {
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background-color: rgba(250, 249, 246, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 100;
 }
 
-#content blockquote{
-    border-left:1px solid var(--text-main);
-    padding-left:24px;
-    margin:36px 0;
-    font-size:17px;
-    font-weight:300;
-    color:var(--text-muted);
-    font-style:italic;
-    line-height:1.6;
-}
-#content p{
-    margin-bottom:18px;
-}
-#content h2{
-    font-size:17px;
-    font-weight:400;
-    letter-spacing:-0.02em;
-    margin:40px 0 16px;
-}
-#content h3{
-    font-size:15px;
-    font-weight:400;
-    margin:32px 0 12px;
-}
-#content ul,
-#content ol{
-    margin:24px 0;
-    padding-left:24px;
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#content li{
-    margin-bottom:8px;
-}
-#content a{
-    color:var(--text-main);
-    text-decoration:none;
-    border-bottom:1px solid var(--border-color);
-}
-
-#content a:hover{
-    border-bottom-color:var(--text-main);
-}
-#content figcaption{
-    margin-top:12px;
-    font-size:12px;
-    color:var(--text-muted);
-    text-align:center;
+.logo a {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-main);
+    text-decoration: none;
+    letter-spacing: -0.02em;
 }
 
-/* ── POST NAV (prev/next) ── */
+.site-nav button {
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-left: 2rem;
+    font-family: var(--font-mono);
+    transition: color 0.2s;
+}
+
+.site-nav button:hover, .site-nav button.active {
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* --- LAYOUT UTAMA --- */
+.container-main {
+    max-width: 1000px;
+    margin: 1.5rem auto;
+    padding: 0 2rem;
+}
+
+/* --- HOMEPAGE / INDEKS --- */
+.view-section {
+    display: none;
+}
+
+.view-section.active-view {
+    display: block;
+}
+
+.index-intro {
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+}
+
+.manifesto {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.journal-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.journal-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 100px;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-color);
+    align-items: start;
+}
+
+.journal-row.visible-row {
+    display: grid;
+}
+
+.journal-row:last-of-type {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.journal-meta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.journal-number {
+    color: var(--text-main);
+    font-weight: bold;
+}
+
+.journal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.journal-title {
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+}
+
+.journal-link {
+    color: var(--text-main);
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: color 0.2s ease;
+}
+
+.journal-link:hover {
+    color: var(--text-muted);
+}
+
+.journal-excerpt {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin-bottom: 0.75rem;
+}
+
+.journal-author {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.journal-thumbnail {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    opacity: 0.3; 
+    filter: grayscale(100%);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+    border: 1px solid #878787;
+}
+
+.journal-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.journal-row:hover .journal-thumbnail {
+    opacity: 0.8;
+    filter: grayscale(0%);
+}
+
+/* --- NAVIGASI BUTTONS (HOMEPAGE & IN-POST) --- */
+.nav-simple-btn {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.nav-simple-btn:hover:not(:disabled) {
+    color: var(--text-main);
+}
+
+.nav-simple-btn:disabled {
+    visibility: hidden;
+}
+
+/* --- HALAMAN DETIL POSTINGAN (ESSAY VIEW) --- */
+.essay-view {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-back:hover {
+    color: var(--text-main);
+}
+
+.essay-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+}
+
+.essay-title-large {
+    font-family: var(--font-serif);
+    font-size: 2.6rem;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.essay-body {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: #222;
+}
+
+.essay-body p {
+    margin-bottom: 2rem;
+    text-align: justify;
+}
+
+/* --- NAVIGASI DI DALAM POSTINGAN --- */
+.post-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- ABOUT VIEW --- */
+.about-view {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* --- FOOTER --- */
+.site-footer {
+    max-width: 1200px;
+    margin: 8rem auto 0 auto;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --- ARTICLE CONTAINER (POST DETAIL) --- */
+.article-container {
+    max-width: 760px;
+    margin: 60px auto 80px;
+    padding: 0 32px;
+}
+
+#content {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-main);
+}
+
+#content img {
+    width: 100%;
+    height: auto;
+}
+
+#content blockquote {
+    border-left: 1px solid var(--text-main);
+    padding-left: 24px;
+    margin: 36px 0;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.6;
+}
+
+#content p {
+    margin-bottom: 18px;
+}
+
+#content h2 {
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 40px 0 16px;
+}
+
+#content h3 {
+    font-size: 15px;
+    font-weight: 400;
+    margin: 32px 0 12px;
+}
+
+#content ul, #content ol {
+    margin: 24px 0;
+    padding-left: 24px;
+}
+
+#content li {
+    margin-bottom: 8px;
+}
+
+#content a {
+    color: var(--text-main);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#content a:hover {
+    border-bottom-color: var(--text-main);
+}
+
+#content figcaption {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* ── POST NAV (PREV/NEXT DI BAWAH ARTIKEL) ── */
 .post-nav {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-top: 64px;
-  padding-top: 40px; border-top: 1px solid var(--border);
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    margin-top: 64px;
+    padding-top: 40px; 
+    border-top: 1px solid var(--border-color);
 }
+
 .post-nav a {
-  font-size: 12px; font-weight: 300; color: var(--muted);
-  text-decoration: none; transition: color var(--t);
+    font-size: 12px; 
+    font-weight: 300; 
+    color: var(--text-muted);
+    text-decoration: none;
 }
-.post-nav a:hover { color: var(--text); }
-/* Styling Utama Wadah Pagination */
+
+.post-nav a:hover { 
+    color: var(--text-main); 
+}
+
+/* ── HOMEPAGE PAGINATION (ANGKA) ── */
 .homepage-pagination {
     display: flex;
     justify-content: center;
@@ -412,26 +409,22 @@
     font-size: 15px;
 }
 
-/* Aturan Teks Link */
 .homepage-pagination a {
     text-decoration: none;
     color: #888;
     transition: color 0.2s ease;
 }
 
-/* Tombol Prev & Next */
 .homepage-pagination .page-nav-trigger {
     color: #888;
 }
 
-/* Ketika Tombol Mati (Misal tombol 'prev' di halaman 1) */
 .homepage-pagination .page-nav-trigger.disabled {
     color: #e0e0e0;
     pointer-events: none;
     cursor: default;
 }
 
-/* Tampilan Angka Normal */
 .homepage-pagination .page-number {
     display: flex;
     justify-content: center;
@@ -441,7 +434,6 @@
     color: #555;
 }
 
-/* Kotak Hitam Presisi pada Halaman yang Sedang Aktif */
 .homepage-pagination .page-number.active {
     color: #000;
     border: 1px solid #000;
@@ -449,7 +441,6 @@
     font-weight: 500;
 }
 
-/* Efek Hover Sentuhan Lembut */
 .homepage-pagination a:hover:not(.disabled):not(.active) {
     color: #000;
 }
@@ -458,66 +449,65 @@
    KUSTOMISASI AREA KOMENTAR CUSDIS (AADDII.COM)
 ======================================================== */
 
-/* 1. Pengaturan Garis Pembatas */
 .comment-separator {
     border: 0;
-    border-top: 1px solid #eeeeee; /* Warna abu-abu tipis senada dengan estetika minimalis web */
-    margin: 40px 0 20px 0; /* Memberi ruang di bawah navigasi next/prev */
+    border-top: 1px solid #eeeeee; 
+    margin: 40px 0 20px 0; 
 }
 
-/* 2. Pengaturan Font Judul Komentar */
 .comment-title {
     font-size: 1.25rem;
     font-weight: 500;
     margin-bottom: 25px;
     color: #111111;
-    /* Otomatis menggunakan font-family utama web karena mewarisi elemen induk */
 }
 
-/* 3. Menghilangkan Scrollbar & Memaksa Kontainer Mengikuti Tinggi Konten */
+/* --- FIX ABSOLUT UNTUK MENGHILANGKAN SCROLLBAR IFRAME --- */
+
+/* 1. Paksa kontainer pembungkus utama agar selalu fleksibel */
+#cusdis_thread, 
 .custom-cusdis-container {
-    width: 100%;
-    overflow: visible !important; /* Mencegah pemotongan box */
-}
-
-/* Memaksa iframe internal milik Cusdis untuk membuka penuh tanpa scrollbar */
-.custom-cusdis-container iframe {
+    display: block !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 250px; /* Batas tinggi minimal kolom input awal */
-    overflow: hidden !important; 
+    overflow: visible !important; /* Mencegah pemotongan area form */
+    font-family: inherit !important; 
+}
+
+/* 2. Dobrak batasan tinggi default user-agent browser (150px) dengan min-height */
+#cusdis_thread iframe,
+.custom-cusdis-container iframe {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 480px !important; /* Memberikan ruang luas agar kolom input & list chat terbuka penuh */
+    overflow: hidden !important; /* Mematikan scrollbar internal secara mutlak */
     border: none !important;
 }
 
-/* 4. Penyelarasan Font-Style ke dalam Form Widget (Shadow DOM Overrides) */
-.custom-cusdis-container, 
-#cusdis_thread {
-    font-family: inherit !important; /* Memaksa font meniru sans-serif bawaan web kamu */
+/* 3. Sembunyikan scrollbar engine Webkit (Chrome/Safari) dan Gecko (Firefox) */
+iframe[src*="cusdis.com"] {
+    scrollbar-width: none !important;
+}
+iframe[src*="cusdis.com"]::-webkit-scrollbar {
+    display: none !important;
 }
 
-/* =====================================
-   CUSDIS AUTOFIT & NO-SCROLL FIX
-===================================== */
-
-/* Memastikan container luar memberikan ruang bebas bergerak */
-#cusdis_thread {
-    display: block !important;
-    width: 100% !important;
-    min-height: 450px !important; /* Memberi ruang tinggi awal agar form reply tidak terpotong */
-    height: auto !important;
-    overflow: visible !important;
-}
-
-/* Menghilangkan scrollbar pada iframe pembawa widget */
-#cusdis_thread iframe {
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-}
-
-/* Mematikan scrollbar internal pada body di dalam dokumen iframe jika terpicu */
-#cusdis_thread iframe::html, 
-#cusdis_thread iframe::body {
-    overflow-y: hidden !important;
-    overflow-x: hidden !important;
+/* --- MEDIA QUERIES --- */
+@media (max-width: 768px) {
+    .journal-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 2rem 0;
+    }
+    .journal-meta { 
+        flex-direction: row; 
+        gap: 1rem; 
+    }
+    .journal-title { 
+        font-size: 1.5rem; 
+    }
+    .journal-thumbnail { 
+        display: none; 
+    }
 }
