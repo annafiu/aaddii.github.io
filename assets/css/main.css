@@ -479,8 +479,9 @@ body {
 .custom-cusdis-container iframe {
     display: block !important;
     width: 100% !important;
-    min-height: 460px !important; /* Ruang awal untuk form kosong */
-    /* Sengaja TIDAK dikunci 'height: auto !important' di sini agar manipulasi tinggi lewat JS berjalan lancar */
+    /* Gunakan max-content agar dia mencoba melar ke tinggi maksimal kontennya sendiri */
+    min-height: max-content !important; 
+    height: 100% !important; /* Kembalikan ke 100% jika menggunakan max-content */
     overflow: hidden !important; 
     border: none !important;
 }
