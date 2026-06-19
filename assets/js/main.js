@@ -341,7 +341,7 @@ function showSection(sectionId){
 }
 
 /* ========================================================
-   MEDIUM.COM STYLE IMAGE ZOOM OVERLAY (WITH AUTO-SCROLL EXIT)
+   MEDIUM.COM STYLE IMAGE ZOOM OVERLAY (PERFECT TRANSITION)
 ======================================================== */
 function initImageZoom() {
     const articleImages = document.querySelectorAll('#content img');
@@ -364,28 +364,49 @@ function initImageZoom() {
             overlay.appendChild(zoomedImg);
             document.body.appendChild(overlay);
             
-            // Memberikan jeda mikroskopis agar transisi CSS berjalan mulus
+            // Masuk mode zoom (Fade In & Scale Up)
             setTimeout(() => {
                 overlay.classList.add('active');
+                // LOCK SCROLL: Kunci scroll halaman utama agar tidak bergerak saat di-zoom
+                document.body.style.overflow = 'hidden';
             }, 10);
             
-            // Fungsi internal untuk mengembalikan gambar ke ukuran awal (Zoom Out)
+            // Fungsi Inti untuk menutup gambar (Zoom Out dulu baru buka scroll)
+            let isClosing = false;
             function closeZoom() {
+                if (isClosing) return;
+                isClosing = true;
+                
+                // Mulai animasi zoom out (kembali ke normal)
                 overlay.classList.remove('active');
                 
-                // Cabut event listener scroll agar tidak menumpuk di memori browser
-                window.removeEventListener('scroll', closeZoom);
+                // Cabut semua event detektor agar memori kembali bersih
+                window.removeEventListener('wheel', handleScrollAttempt);
+                window.removeEventListener('touchmove', handleScrollAttempt);
                 
+                // Tunggu sampai animasi CSS mengecil selesai (300ms)
                 setTimeout(() => {
+                    // UNLOCK SCROLL: Kembalikan fungsi scroll halaman utama
+                    document.body.style.overflow = '';
                     overlay.remove();
-                }, 300); // Sinkron dengan durasi transisi CSS (0.3s)
+                }, 300); // Harus sinkron dengan durasi transisi di CSS (0.3s)
             }
             
-            // 3. Klik di mana saja untuk menutup mode zoom
+            // Fungsi interseptor untuk mendeteksi jika user mencoba scroll
+            function handleScrollAttempt(event) {
+                // Tahan/blokir gerakan scroll bawaan browser saat gambar masih membesar
+                event.preventDefault(); 
+                // Jalankan proses zoom out terlebih dahulu
+                closeZoom();
+            }
+            
+            // A. Klik pada gambar atau area kosong untuk menutup normal
             overlay.addEventListener('click', closeZoom);
             
-            // 4. FITUR MEDIUM: Langsung menutup gambar secara dinamis saat roda gulir layar bergerak
-            window.addEventListener('scroll', closeZoom, { passive: true });
+            // B. Deteksi usaha scroll (Roda mouse / Trackpad / Swipe Layar HP)
+            // Kita gunakan { passive: false } agar browser mengizinkan perintah event.preventDefault()
+            window.addEventListener('wheel', handleScrollAttempt, { passive: false });
+            window.addEventListener('touchmove', handleScrollAttempt, { passive: false });
         });
     });
 }
