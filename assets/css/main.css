@@ -453,3 +453,44 @@
 .homepage-pagination a:hover:not(.disabled):not(.active) {
     color: #000;
 }
+
+/* ========================================================
+   KUSTOMISASI AREA KOMENTAR CUSDIS (AADDII.COM)
+======================================================== */
+
+/* 1. Pengaturan Garis Pembatas */
+.comment-separator {
+    border: 0;
+    border-top: 1px solid #eeeeee; /* Warna abu-abu tipis senada dengan estetika minimalis web */
+    margin: 40px 0 20px 0; /* Memberi ruang di bawah navigasi next/prev */
+}
+
+/* 2. Pengaturan Font Judul Komentar */
+.comment-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: #111111;
+    /* Otomatis menggunakan font-family utama web karena mewarisi elemen induk */
+}
+
+/* 3. Menghilangkan Scrollbar & Memaksa Kontainer Mengikuti Tinggi Konten */
+.custom-cusdis-container {
+    width: 100%;
+    overflow: visible !important; /* Mencegah pemotongan box */
+}
+
+/* Memaksa iframe internal milik Cusdis untuk membuka penuh tanpa scrollbar */
+.custom-cusdis-container iframe {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 250px; /* Batas tinggi minimal kolom input awal */
+    overflow: hidden !important; 
+    border: none !important;
+}
+
+/* 4. Penyelarasan Font-Style ke dalam Form Widget (Shadow DOM Overrides) */
+.custom-cusdis-container, 
+#cusdis_thread {
+    font-family: inherit !important; /* Memaksa font meniru sans-serif bawaan web kamu */
+}
