@@ -281,6 +281,9 @@ function renderPost(data){
             }
         }
     }
+
+    // Inisialisasi fitur zoom gambar Medium setelah konten artikel terpasang utuh
+    initImageZoom();
 } 
 
 /* =====================================
@@ -338,42 +341,86 @@ function showSection(sectionId){
 }
 
 /* ========================================================
+   MEDIUM.COM STYLE IMAGE ZOOM OVERLAY (WITH AUTO-SCROLL EXIT)
+======================================================== */
+function initImageZoom() {
+    const articleImages = document.querySelectorAll('#content img');
+    
+    articleImages.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        
+        img.addEventListener('click', function(e) {
+            e.stopPropagation(); 
+            
+            // 1. Buat kontainer overlay latar belakang
+            const overlay = document.createElement('div');
+            overlay.className = 'image-zoom-overlay';
+            
+            // 2. Buat duplikasi elemen gambar untuk diperbesar
+            const zoomedImg = document.createElement('img');
+            zoomedImg.src = this.src;
+            zoomedImg.className = 'image-zoomed';
+            
+            overlay.appendChild(zoomedImg);
+            document.body.appendChild(overlay);
+            
+            // Memberikan jeda mikroskopis agar transisi CSS berjalan mulus
+            setTimeout(() => {
+                overlay.classList.add('active');
+            }, 10);
+            
+            // Fungsi internal untuk mengembalikan gambar ke ukuran awal (Zoom Out)
+            function closeZoom() {
+                overlay.classList.remove('active');
+                
+                // Cabut event listener scroll agar tidak menumpuk di memori browser
+                window.removeEventListener('scroll', closeZoom);
+                
+                setTimeout(() => {
+                    overlay.remove();
+                }, 300); // Sinkron dengan durasi transisi CSS (0.3s)
+            }
+            
+            // 3. Klik di mana saja untuk menutup mode zoom
+            overlay.addEventListener('click', closeZoom);
+            
+            // 4. FITUR MEDIUM: Langsung menutup gambar secara dinamis saat roda gulir layar bergerak
+            window.addEventListener('scroll', closeZoom, { passive: true });
+        });
+    });
+}
+
+/* ========================================================
    CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR (ENHANCED)
 ======================================================== */
 window.addEventListener('message', (event) => {
-    // Membuka celah pengecekan data pesan dari Cusdis
     if (event.data) {
         try {
-            // Beberapa versi iframe mengirimkan object, sebagian mengirimkan JSON string
             const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
             
-            // Tangkap event resize bawaan widget Cusdis
             if (data.type === 'resize' && data.height) {
                 const cusdisIframe = document.querySelector('#cusdis_thread iframe');
                 if (cusdisIframe) {
-                    // Berikan padding ekstra 40px agar bagian bawah komentar tidak mepet
                     cusdisIframe.style.setProperty('height', `${data.height + 40}px`, 'important');
                 }
             }
         } catch (e) {
-            // Gagal parsing jika string biasa, abaikan aman
+            // Passthrough safely
         }
     }
 });
 
-/* FALLBACK INTERVENSAL: Jika skrip event di atas diblokir browser, 
-   kita cek berkala tinggi DOM asli di dalam iframe setiap 1.5 detik */
+/* FALLBACK INTERVENSAL: Mengecek tinggi DOM riil internal iframe setiap 1.5 detik */
 setInterval(() => {
     const cusdisIframe = document.querySelector('#cusdis_thread iframe');
     if (cusdisIframe && cusdisIframe.contentWindow) {
         try {
-            // Hanya bekerja sempurna jika document internal bisa diakses (same-origin/shadow-root)
             const internalHeight = cusdisIframe.contentWindow.document.body.scrollHeight;
             if (internalHeight && internalHeight > 150) {
                 cusdisIframe.style.setProperty('height', `${internalHeight + 20}px`, 'important');
             }
         } catch (e) {
-            // Tertahan CORS jika cross-origin total, penanganan diserahkan kembali ke event listener di atas
+            // Tertahan CORS cross-origin, dihandle otomatis oleh event listener message di atas
         }
     }
 }, 1500);
