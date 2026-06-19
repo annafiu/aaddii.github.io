@@ -496,20 +496,28 @@
 }
 
 /* =====================================
-   FIXED CUSDIS NO-SCROLL & AUTOFIT
+   CUSDIS AUTOFIT & NO-SCROLL FIX
 ===================================== */
 
-/* Pastikan elemen utama tidak membatasi tinggi */
+/* Memastikan container luar memberikan ruang bebas bergerak */
 #cusdis_thread {
-    min-height: 200px; /* Batas minimum awal saat form kosong */
+    display: block !important;
+    width: 100% !important;
+    min-height: 450px !important; /* Memberi ruang tinggi awal agar form reply tidak terpotong */
     height: auto !important;
     overflow: visible !important;
 }
 
-/* Memaksa elemen Iframe di dalamnya mengikuti tinggi asli konten tanpa scrollbar */
+/* Menghilangkan scrollbar pada iframe pembawa widget */
 #cusdis_thread iframe {
+    width: 100% !important;
     height: 100% !important;
-    min-height: 100% !important;
-    overflow: hidden !important; /* Menghilangkan scrollbar internal iframe */
-    display: block;
+    overflow: hidden !important;
+}
+
+/* Mematikan scrollbar internal pada body di dalam dokumen iframe jika terpicu */
+#cusdis_thread iframe::html, 
+#cusdis_thread iframe::body {
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
 }
