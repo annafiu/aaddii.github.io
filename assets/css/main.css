@@ -286,15 +286,21 @@ body {
     margin: 0 auto;
 }
 
-/* --- FOOTER --- */
+/* --- FOOTER UTAMA (Untuk Halaman Home / Default) --- */
 .site-footer {
     max-width: 1200px;
-    margin: 8rem auto 0 auto;
+    margin: 8rem auto 0 auto; /* Tetap menggunakan margin default 8rem untuk halaman utama */
     padding: 3rem 2rem;
     border-top: 1px solid var(--border-color);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--text-muted);
+}
+
+/* --- FOOTER KHUSUS HALAMAN POSTINGAN --- */
+/* Selektor ini hanya akan aktif jika .site-footer berada di dalam body bertanda kelas .post-page */
+.post-page .site-footer {
+    margin: -2rem auto 0 auto !important; 
 }
 
 .footer-container {
