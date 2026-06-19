@@ -23,7 +23,6 @@ function getSlug(){
    INDEX PAGE UTILITIES
 ===================================== */
 
-// Fungsi untuk mengambil nomor halaman aktif dari URL browser
 function getCurrentPage() {
     const url = new URLSearchParams(window.location.search);
     const page = parseInt(url.get('page'));
@@ -34,7 +33,7 @@ function getCurrentPage() {
    INDEX PAGE (HITUNGAN MUNDUR + PAGINATION ANGKA)
 ===================================== */
 
-const POSTS_PER_PAGE = 4; // Tentukan di sini mau memunculkan berapa artikel per halaman
+const POSTS_PER_PAGE = 4; 
 
 function loadPosts(data){
 
@@ -45,7 +44,6 @@ function loadPosts(data){
     container.innerHTML = '';
     const entries = data.feed.entry;
 
-    // 1. Ambil total seluruh postingan global dari Blogspot
     const totalResults = parseInt(data.feed.openSearch$totalResults.$t);
     const currentPage = getCurrentPage();
 
@@ -66,7 +64,6 @@ function loadPosts(data){
         const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
         if(imgMatch){ thumb = imgMatch[1]; }
 
-        // FORMAT TANGGAL INDEKS: friday, jun 19, 2026
         const dateObj = new Date(post.published.$t);
         const dateText = dateObj.toLocaleDateString('en-US', { 
             weekday: 'long', 
@@ -78,7 +75,6 @@ function loadPosts(data){
         const article = document.createElement('article');
         article.className = 'journal-row';
 
-        // Menjamin nomor urut tetap mundur dengan benar meskipun artikel sudah berpindah halaman
         const currentPostNumber = totalResults - ((currentPage - 1) * POSTS_PER_PAGE) - index;
 
         article.innerHTML = `
@@ -119,7 +115,6 @@ function loadPosts(data){
     const paginationContainer = document.getElementById('numeric-pagination');
     
     if (paginationContainer) {
-        // PENGAMAN: Jika halaman "Tentang" sedang aktif, langsung kosongkan pagination & stop script!
         const aboutView = document.getElementById('about-view');
         if (aboutView && aboutView.classList.contains('active-view')) {
             paginationContainer.innerHTML = '';
@@ -128,13 +123,10 @@ function loadPosts(data){
         }
 
         paginationContainer.innerHTML = ''; 
-        
-        // Hitung total halaman yang ada
         const totalPages = Math.ceil(totalResults / POSTS_PER_PAGE);
         
         if (totalPages > 1) {
             
-            // Tombol 'prev'
             const prevLink = document.createElement('a');
             prevLink.innerText = 'prev';
             if (currentPage > 1) {
@@ -145,7 +137,6 @@ function loadPosts(data){
             }
             paginationContainer.appendChild(prevLink);
 
-            // Daftar Angka Halaman (1, 2, 3, dst.)
             for (let i = 1; i <= totalPages; i++) {
                 const pageLink = document.createElement('a');
                 pageLink.innerText = i;
@@ -159,7 +150,6 @@ function loadPosts(data){
                 paginationContainer.appendChild(pageLink);
             }
 
-            // Tombol 'next'
             const nextLink = document.createElement('a');
             nextLink.innerText = 'next';
             if (currentPage < totalPages) {
@@ -190,7 +180,6 @@ function renderPost(data){
     const entries = data.feed.entry;
     let currentIndex = -1;
 
-    // 1. Cari tahu artikel aktif berada di index ke-berapa
     for(let i = 0; i < entries.length; i++){
         const alt = entries[i].link.find(l => l.rel === 'alternate');
         if(!alt) continue;
@@ -202,21 +191,18 @@ function renderPost(data){
         }
     }
 
-    // Jika artikel tidak ketemu di data JSON
     if(currentIndex === -1) {
         const titleElement = document.getElementById('title');
         if(titleElement) titleElement.innerHTML = 'Artikel tidak ditemukan';
         return;
     }
 
-    // 2. Ambil data artikel aktif berdasarkan index yang didapat
     const post = entries[currentIndex];
     const title = post.title.$t;
     let content = post.content ? post.content.$t : '';
     const plainText = stripHtml(content);
     const excerpt = plainText.substring(0,220) + '...';
     
-    // FORMAT TANGGAL ARTIKEL: friday, jun 19, 2026
     const dateObj = new Date(post.published.$t);
     const dateText = dateObj.toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -240,16 +226,14 @@ function renderPost(data){
     contentElement.innerHTML = content;
 
     // =====================================
-    // LOGIKA OTOMATIS NAVIGATION (DENGAN VISIBILITY HIDDEN)
+    // LOGIKA OTOMATIS NAVIGATION
     // =====================================
-    const prevButton = document.getElementById('prev-btn'); // Link Sebelah Kiri (Lebih Baru)
-    const nextButton = document.getElementById('next-btn'); // Link Sebelah Kanan (Lebih Lama)
+    const prevButton = document.getElementById('prev-btn'); 
+    const nextButton = document.getElementById('next-btn'); 
 
-    // Urutan data Blogger: 0 = Paling Baru, entries.length - 1 = Paling Lama
-    const newerIndex = currentIndex - 1; // Artikel lebih baru (indeks mengecil)
-    const olderIndex = currentIndex + 1; // Artikel lebih lama (indeks membesar)
+    const newerIndex = currentIndex - 1; 
+    const olderIndex = currentIndex + 1; 
 
-    // 1. ATUR TOMBOL KIRI (PREV - Artikel Lebih Baru)
     if (newerIndex >= 0 && prevButton) {
         const prevAlt = entries[newerIndex].link.find(l => l.rel === 'alternate');
         if (prevAlt) {
@@ -261,7 +245,6 @@ function renderPost(data){
         prevButton.style.visibility = 'hidden'; 
     }
 
-    // 2. ATUR TOMBOL KANAN (NEXT - Artikel Lebih Lama)
     if (olderIndex < entries.length && nextButton) {
         const nextAlt = entries[olderIndex].link.find(l => l.rel === 'alternate');
         if (nextAlt) {
@@ -278,17 +261,13 @@ function renderPost(data){
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
-        // Set data identitas artikel secara dinamis ke elemen wadah
         cusdisThread.setAttribute('data-host', 'https://cusdis.com');
         cusdisThread.setAttribute('data-app-id', '81ea97a7-cb6d-4a6a-97f9-a7afe09ff5dd');
         cusdisThread.setAttribute('data-page-id', slug); 
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
-        
-        // Mengaktifkan fitur auto height bawaan agar tinggi iframe mengikuti isi konten secara fleksibel
         cusdisThread.setAttribute('data-iframe-auto-height', 'true');
 
-        // Jika script Cusdis belum terpasang di halaman, muat secara asinkron
         if (!document.getElementById('cusdis-script')) {
             const script = document.createElement('script');
             script.id = 'cusdis-script';
@@ -297,7 +276,6 @@ function renderPost(data){
             script.src = 'https://cusdis.com/js/cusdis.es.js';
             document.body.appendChild(script);
         } else {
-            // Jika script sudah ada (pindah dari artikel lain), perintahkan Cusdis merender ulang komentar baru
             if (window.CUSDIS && typeof window.CUSDIS.renderDoc === 'function') {
                 window.CUSDIS.renderDoc(cusdisThread);
             }
@@ -306,7 +284,7 @@ function renderPost(data){
 } 
 
 /* =====================================
-   SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
+   SINGLE PAGE NAV
 ===================================== */
 
 function showSection(sectionId){
@@ -340,7 +318,6 @@ function showSection(sectionId){
 
     if(sectionId === 'index-view' && navIndex){
         navIndex.classList.add('active');
-        // Tampilkan kembali pagination saat user membuka tab Indeks
         if(pgContainer) {
             pgContainer.style.display = 'flex';
         }
@@ -348,7 +325,6 @@ function showSection(sectionId){
 
     if(sectionId === 'about-view' && navAbout){
         navAbout.classList.add('active');
-        // Membersihkan isi & menyembunyikan elemen pagination total di halaman "Tentang"
         if(pgContainer) {
             pgContainer.innerHTML = '';
             pgContainer.style.display = 'none';
@@ -361,13 +337,32 @@ function showSection(sectionId){
     });
 }
 
+/* ========================================================
+   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR
+======================================================== */
+window.addEventListener('message', (event) => {
+    if (event.origin === 'https://cusdis.com' && event.data) {
+        try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'resize' && data.height) {
+                const cusdisIframe = document.querySelector('#cusdis_thread iframe');
+                if (cusdisIframe) {
+                    // Menyuntikkan tinggi dinamis baru langsung ke element style iframe induk
+                    cusdisIframe.style.setProperty('height', `${data.height + 24}px`, 'important');
+                }
+            }
+        } catch (e) {
+            // Passthrough non-json data safely
+        }
+    }
+});
+
 /* =====================================
-   PAGE INIT (Hanya Ada Satu Listener DOM)
+   PAGE INIT
 ===================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* 1. KONDISI UNTUK HALAMAN UTAMA (INDEX) */
     if (document.getElementById('main-journal-list')) {
         const currentPage = getCurrentPage();
         const startIndex = ((currentPage - 1) * POSTS_PER_PAGE) + 1;
@@ -377,7 +372,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(script);
     }
 
-    /* 2. KONDISI UNTUK HALAMAN BACA ARTIKEL (POST) */
     if (document.getElementById('content')) {
         const script = document.createElement('script');
         script.src = `https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost`;
