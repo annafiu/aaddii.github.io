@@ -66,8 +66,14 @@ function loadPosts(data){
         const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
         if(imgMatch){ thumb = imgMatch[1]; }
 
+        // FORMAT TANGGAL INDEKS: friday, jun 19, 2026
         const dateObj = new Date(post.published.$t);
-        const dateText = dateObj.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+        const dateText = dateObj.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        }).toLowerCase();
 
         const article = document.createElement('article');
         article.className = 'journal-row';
@@ -208,8 +214,15 @@ function renderPost(data){
     let content = post.content ? post.content.$t : '';
     const plainText = stripHtml(content);
     const excerpt = plainText.substring(0,220) + '...';
+    
+    // FORMAT TANGGAL ARTIKEL: friday, jun 19, 2026
     const dateObj = new Date(post.published.$t);
-    const dateText = dateObj.toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+    const dateText = dateObj.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+    }).toLowerCase();
 
     document.title = title;
 
@@ -289,6 +302,7 @@ function renderPost(data){
             }
         }
     }
+} // <-- DISINI TADI BREAKPOINT YANG HILANG (SUDAH DIKEMBALIKAN)
 
 /* =====================================
    SINGLE PAGE NAV (DENGAN PENGAMAN BERLAPIS)
