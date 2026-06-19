@@ -462,7 +462,7 @@ body {
     color: #111111;
 }
 
-/* --- FIX ABSOLUT UNTUK MENGHILANGKAN SCROLLBAR IFRAME --- */
+/* --- FIX ABSOLUT LIVE RESIZE & NO-SCROLL --- */
 
 /* 1. Paksa kontainer pembungkus utama agar selalu fleksibel */
 #cusdis_thread, 
@@ -470,22 +470,22 @@ body {
     display: block !important;
     width: 100% !important;
     height: auto !important;
-    overflow: visible !important; /* Mencegah pemotongan area form */
+    overflow: visible !important; 
     font-family: inherit !important; 
 }
 
-/* 2. Dobrak batasan tinggi default user-agent browser (150px) dengan min-height */
+/* 2. Biarkan script JS di main.js memegang kendali penuh atas height dinamisnya */
 #cusdis_thread iframe,
 .custom-cusdis-container iframe {
     display: block !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 480px !important; /* Memberikan ruang luas agar kolom input & list chat terbuka penuh */
-    overflow: hidden !important; /* Mematikan scrollbar internal secara mutlak */
+    min-height: 460px !important; /* Ruang awal untuk form kosong */
+    /* Sengaja TIDAK dikunci 'height: auto !important' di sini agar manipulasi tinggi lewat JS berjalan lancar */
+    overflow: hidden !important; 
     border: none !important;
 }
 
-/* 3. Sembunyikan scrollbar engine Webkit (Chrome/Safari) dan Gecko (Firefox) */
+/* 3. Matikan scrollbar engine Webkit (Chrome/Safari) dan Gecko (Firefox) secara berlapis */
 iframe[src*="cusdis.com"] {
     scrollbar-width: none !important;
 }
