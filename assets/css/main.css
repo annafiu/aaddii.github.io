@@ -528,15 +528,15 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(250, 249, 246, 0.96); /* Latar krem minimalis */
+    background-color: rgba(250, 249, 246, 0.96); /* Mengikuti warna krem minimalis web Anda */
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     cursor: zoom-out;
-    /* Menggunakan kurva bezier khusus untuk efek transisi yang mengalir halus */
-    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    /* Kurva bezier khusus (cubic-bezier) untuk transisi super smooth ala Medium */
+    transition: opacity 0.3s cubic-bezier(0.2, 0, 0.2, 1);
     will-change: opacity;
 }
 
@@ -544,10 +544,9 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     max-width: 90%;
     max-height: 85%;
     object-fit: contain;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
-    /* Mulai dari skala agak mengecil saat transisi masuk */
-    transform: scale(0.94);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.05);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
     will-change: transform;
 }
 
@@ -557,5 +556,5 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
 }
 
 .image-zoom-overlay.active img.image-zoomed {
-    transform: scale(1); /* Gambar melebar mantap ke ukuran maksimal */
+    transform: scale(1);
 }
