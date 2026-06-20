@@ -1,4 +1,4 @@
-/* --- RESET & VARIABEL --- */
+/* --- RESET & VARIABLES --- */
 * {
     margin: 0;
     padding: 0;
@@ -25,7 +25,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- HEADER & NAVIGASI UTAMA --- */
+/* --- HEADER & MAIN NAVIGATION --- */
 .site-header {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
@@ -69,14 +69,14 @@ body {
     font-weight: 500;
 }
 
-/* --- LAYOUT UTAMA --- */
+/* --- MAIN LAYOUT --- */
 .container-main {
     max-width: 1000px;
     margin: 1.5rem auto;
     padding: 0 2rem;
 }
 
-/* --- HOMEPAGE / INDEKS --- */
+/* --- HOMEPAGE / INDEX --- */
 .view-section {
     display: none;
 }
@@ -200,7 +200,7 @@ body {
     filter: grayscale(0%);
 }
 
-/* --- NAVIGASI BUTTONS (HOMEPAGE & IN-POST) --- */
+/* --- NAVIGATION BUTTONS (HOMEPAGE & IN-POST) --- */
 .nav-simple-btn {
     background: none;
     border: none;
@@ -219,7 +219,7 @@ body {
     visibility: hidden;
 }
 
-/* --- HALAMAN DETIL POSTINGAN (ESSAY VIEW) --- */
+/* --- POST DETAIL PAGE (ESSAY VIEW) --- */
 .essay-view {
     max-width: 720px;
     margin: 0 auto;
@@ -270,7 +270,7 @@ body {
     text-align: justify;
 }
 
-/* --- NAVIGASI DI DALAM POSTINGAN --- */
+/* --- IN-POST NAVIGATION --- */
 .post-navigation {
     display: flex;
     justify-content: space-between;
@@ -286,10 +286,10 @@ body {
     margin: 0 auto;
 }
 
-/* --- FOOTER UTAMA (Untuk Halaman Home / Default) --- */
+/* --- MAIN FOOTER (For Home / Default Pages) --- */
 .site-footer {
     max-width: 1200px;
-    margin: 8rem auto 0 auto; /* Tetap menggunakan margin default 8rem untuk halaman utama */
+    margin: 8rem auto 0 auto; /* Keep default 8rem margin for main pages */
     padding: 3rem 2rem;
     border-top: 1px solid var(--border-color);
     font-family: var(--font-mono);
@@ -297,8 +297,8 @@ body {
     color: var(--text-muted);
 }
 
-/* --- FOOTER KHUSUS HALAMAN POSTINGAN --- */
-/* Selektor ini hanya akan aktif jika .site-footer berada di dalam body bertanda kelas .post-page */
+/* --- SPECIFIC POST PAGE FOOTER --- */
+/* This selector will only be active if .site-footer is inside a body with the .post-page class */
 .post-page .site-footer {
     margin: -2rem auto 0 auto !important; 
 }
@@ -382,7 +382,7 @@ body {
     text-align: center;
 }
 
-/* ── POST NAV (PREV/NEXT DI BAWAH ARTIKEL) ── */
+/* ── POST NAV (PREV/NEXT BELOW ARTICLE) ── */
 .post-nav {
     display: flex; 
     justify-content: space-between;
@@ -403,7 +403,7 @@ body {
     color: var(--text-main); 
 }
 
-/* ── HOMEPAGE PAGINATION (ANGKA) ── */
+/* ── HOMEPAGE PAGINATION (NUMBERS) ── */
 .homepage-pagination {
     display: flex;
     justify-content: center;
@@ -452,7 +452,7 @@ body {
 }
 
 /* ========================================================
-   KUSTOMISASI AREA KOMENTAR CUSDIS (AADDII.COM)
+   CUSDIS COMMENT AREA CUSTOMIZATION (AADDII.COM)
 ======================================================== */
 
 .comment-separator {
@@ -468,9 +468,9 @@ body {
     color: #111111;
 }
 
-/* --- FIX ABSOLUT LIVE RESIZE & NO-SCROLL --- */
+/* --- FIX ABSOLUTE LIVE RESIZE & NO-SCROLL --- */
 
-/* 1. Paksa kontainer pembungkus utama agar selalu fleksibel */
+/* 1. Force the main wrapper container to always be flexible */
 #cusdis_thread, 
 .custom-cusdis-container {
     display: block !important;
@@ -480,19 +480,19 @@ body {
     font-family: inherit !important; 
 }
 
-/* 2. Biarkan script JS di main.js memegang kendali penuh atas height dinamisnya */
+/* 2. Let the JS script in main.js take full control of its dynamic height */
 #cusdis_thread iframe,
 .custom-cusdis-container iframe {
     display: block !important;
     width: 100% !important;
-    /* Gunakan max-content agar dia mencoba melar ke tinggi maksimal kontennya sendiri */
+    /* Use max-content so it tries to expand to the maximum height of its own content */
     min-height: max-content !important; 
-    height: 100% !important; /* Kembalikan ke 100% jika menggunakan max-content */
+    height: 100% !important; /* Revert to 100% if using max-content */
     overflow: hidden !important; 
     border: none !important;
 }
 
-/* 3. Matikan scrollbar engine Webkit (Chrome/Safari) dan Gecko (Firefox) secara berlapis */
+/* 3. Disable Webkit (Chrome/Safari) and Gecko (Firefox) scrollbar engines in layers */
 iframe[src*="cusdis.com"] {
     scrollbar-width: none !important;
 }
@@ -528,14 +528,14 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(250, 249, 246, 0.96); /* Mengikuti warna krem minimalis web Anda */
+    background-color: rgba(250, 249, 246, 0.96); /* Following your web's minimalist cream color */
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     cursor: zoom-out;
-    /* Kurva bezier khusus (cubic-bezier) untuk transisi super smooth ala Medium */
+    /* Custom bezier curve (cubic-bezier) for super smooth Medium-style transition */
     transition: opacity 0.3s cubic-bezier(0.2, 0, 0.2, 1);
     will-change: opacity;
 }
@@ -550,7 +550,7 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     will-change: transform;
 }
 
-/* Saat mode aktif berjalan */
+/* When active mode is running */
 .image-zoom-overlay.active {
     opacity: 1;
 }
