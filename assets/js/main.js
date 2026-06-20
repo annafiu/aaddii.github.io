@@ -30,7 +30,7 @@ function getCurrentPage() {
 }
 
 /* =====================================
-   INDEX PAGE (HITUNGAN MUNDUR + PAGINATION ANGKA)
+   INDEX PAGE (COUNTDOWN + NUMERIC PAGINATION)
 ===================================== */
 
 const POSTS_PER_PAGE = 4; 
@@ -110,7 +110,7 @@ function loadPosts(data){
     });
 
     // =====================================
-    // LOGIKA GENERATE ANGKA PAGINATION
+    // NUMERIC PAGINATION LOGIC
     // =====================================
     const paginationContainer = document.getElementById('numeric-pagination');
     
@@ -226,7 +226,7 @@ function renderPost(data){
     contentElement.innerHTML = content;
 
     // =====================================
-    // LOGIKA OTOMATIS NAVIGATION
+    // AUTOMATIC NAVIGATION LOGIC
     // =====================================
     const prevButton = document.getElementById('prev-btn'); 
     const nextButton = document.getElementById('next-btn'); 
@@ -257,7 +257,7 @@ function renderPost(data){
     }
 
     // =====================================
-    // INTEGRASI DINAMIS KOMENTAR CUSDIS
+    // CUSDIS DYNAMIC COMMENT INTEGRATION
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
@@ -282,7 +282,7 @@ function renderPost(data){
         }
     }
 
-    // Inisialisasi fitur zoom gambar Medium setelah konten artikel terpasang utuh
+    // Initialize Medium-style image zoom after post content is loaded
     initImageZoom();
 } 
 
@@ -352,11 +352,11 @@ function initImageZoom() {
         img.addEventListener('click', function(e) {
             e.stopPropagation(); 
             
-            // 1. Buat kontainer overlay latar belakang
+            // 1. Create background overlay container
             const overlay = document.createElement('div');
             overlay.className = 'image-zoom-overlay';
             
-            // 2. Buat duplikasi elemen gambar untuk diperbesar
+            // 2. Create duplicate element for zoom
             const zoomedImg = document.createElement('img');
             zoomedImg.src = this.src;
             zoomedImg.className = 'image-zoomed';
@@ -364,15 +364,15 @@ function initImageZoom() {
             overlay.appendChild(zoomedImg);
             document.body.appendChild(overlay);
             
-            // Simpan koordinat scroll awal saat gambar diklik
+            // Store initial scroll coordinates
             const initialScrollY = window.scrollY;
             
-            // Masuk mode zoom
+            // Enter zoom mode
             setTimeout(() => {
                 overlay.classList.add('active');
             }, 10);
             
-            // Fungsi menutup gambar (Zoom Out)
+            // Close zoom function
             let isClosing = false;
             function closeZoom() {
                 if (isClosing) return;
@@ -380,30 +380,28 @@ function initImageZoom() {
                 
                 overlay.classList.remove('active');
                 
-                // Cabut event listener agar tidak membebani memori browser
+                // Remove listener to prevent memory leaks
                 window.removeEventListener('scroll', handleScrollClose);
                 
                 setTimeout(() => {
                     overlay.remove();
-                }, 300); // Sinkron dengan durasi transisi di CSS (0.3s)
+                }, 300); // Sync with CSS transition
             }
             
-            // FITUR UTAMA: Deteksi pergerakan scroll halaman secara natural
+            // MAIN FEATURE: Detect natural page scroll
             function handleScrollClose() {
-                // Hitung seberapa jauh user melakukan scroll dari posisi awal
                 const scrollDelta = Math.abs(window.scrollY - initialScrollY);
                 
-                // Jika user melakukan scroll lebih dari 20 pixel, jalankan efek zoom out secara halus
+                // If user scrolls > 20px, execute smooth zoom out
                 if (scrollDelta > 20) {
                     closeZoom();
                 }
             }
             
-            // A. Klik pada gambar atau area kosong untuk menutup normal
+            // A. Click on image or overlay to close
             overlay.addEventListener('click', closeZoom);
             
-            // B. Deteksi scroll natural (Tanpa mengunci halaman, persis seperti di video Medium)
-            // Menggunakan { passive: true } agar scroll bawaan browser berjalan super lancar tanpa hambatan
+            // B. Natural scroll detection (passive: true for smooth performance)
             window.addEventListener('scroll', handleScrollClose, { passive: true });
         });
     });
@@ -429,7 +427,7 @@ window.addEventListener('message', (event) => {
     }
 });
 
-/* FALLBACK INTERVENSAL: Mengecek tinggi DOM riil internal iframe setiap 1.5 detik */
+/* FALLBACK: Check iframe height every 1.5 seconds */
 setInterval(() => {
     const cusdisIframe = document.querySelector('#cusdis_thread iframe');
     if (cusdisIframe && cusdisIframe.contentWindow) {
@@ -439,7 +437,7 @@ setInterval(() => {
                 cusdisIframe.style.setProperty('height', `${internalHeight + 20}px`, 'important');
             }
         } catch (e) {
-            // Tertahan CORS cross-origin, dihandle otomatis oleh event listener message di atas
+            // Cross-origin blocked, handled by message listener
         }
     }
 }, 1500);
