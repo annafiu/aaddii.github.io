@@ -558,3 +558,18 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
 .image-zoom-overlay.active img.image-zoomed {
     transform: scale(1);
 }
+
+/* Styling for Blogger image captions */
+.tr-caption-container {
+    margin-top: 10px !important; /* Set margin between the image and the caption */
+    width: 100% !important;
+}
+
+.tr-caption {
+    font-size: 0.85rem;      /* Reduce font size for a cleaner look */
+    color: #777;             /* Apply a soft gray color for better contrast */
+    font-style: italic;      /* Add italic style for aesthetic emphasis */
+    line-height: 1.4;        /* Improve readability with optimized line spacing */
+    text-align: center;      /* Ensure the caption is centered */
+    padding: 5px 0;
+}
