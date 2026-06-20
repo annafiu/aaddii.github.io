@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,13 @@
     <link rel="stylesheet" href="./assets/css/main.css">
 </head>
     
-<!-- Menambahkan class post-page agar margin khusus -2rem pada footer aktif di halaman ini saja -->
 <body class="post-page">
     <header class="site-header">
         <div class="header-container">
             <h1 class="logo"><a href="index.html">aaddii.com</a></h1>
             <nav class="site-nav">
-                <button id="nav-index" class="active" onclick="showSection('index-view')">Indeks</button>
-                <button id="nav-about" onclick="showSection('about-view')">Tentang</button>
+                <button id="nav-index" onclick="window.location.href='index.html'">Index</button>
+                <button id="nav-about" onclick="window.location.href='index.html?section=about'">About</button>
             </nav>
         </div>
     </header>
@@ -32,7 +31,7 @@
                     <header class="essay-header">
                         <div class="journal-meta">
                             <span id="article-date">Loading...</span>
-                            <span>Oleh Adi Iman Wicaksono</span>
+                            <span>By Adi Iman Wicaksono</span>
                         </div>
                         <h1 id="title" class="journal-title">Loading...</h1>
                         <p id="excerpt" class="journal-excerpt" style="display:none"></p>
@@ -44,11 +43,11 @@
                     <div class="post-nav">
                         <a href="#" id="prev-btn">← prev</a>
                         <a href="#" id="next-btn">next →</a>
-                    </                    </div>
+                    </div>
                 </div>
 
                 <hr class="comment-separator">
-                <h2 class="comment-title">Tulis komentar..</h2>
+                <h2 class="comment-title">Leave a comment</h2>
                 
                 <div id="cusdis_thread"></div>
                 
@@ -59,11 +58,10 @@
     <footer class="site-footer">
         <div class="footer-container">
             <p>&copy; 2026 aaddii.com.</p>
-            <p>Indeks Jurnal Terbuka.</p>
+            <p>Open Journal Index.</p>
         </div>
     </footer>
 
-    <script src="https://aaddiiweb.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=100&callback=renderPost"></script>
     <script src="./assets/js/main.js"></script>
 </body>
 </html>
