@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aaddii.com — Jurnal & Catatan Ruang</title>
+    <title>aaddii.com — Journal & Spatial Notes</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,8 @@
         <div class="header-container">
             <h1 class="logo"><a href="https://www.annafiu.com/aaddii.github.io/" onclick="showSection('index-view')">aaddii.com</a></h1>
             <nav class="site-nav">
-                <button id="nav-index" class="active" onclick="showSection('index-view')">Indeks</button>
-                <button id="nav-about" onclick="showSection('about-view')">Tentang</button>
+                <button id="nav-index" class="active" onclick="showSection('index-view')">Index</button>
+                <button id="nav-about" onclick="showSection('about-view')">About</button>
             </nav>
         </div>
     </header>
@@ -27,31 +27,30 @@
 
         <section id="index-view" class="view-section active-view">
             <header class="index-intro">
-                <p class="manifesto">Kumpulan esai, catatan spekulatif, dan pembacaan kritis atas arsitektur, ruang, dan lanskap.</p>
+                <p class="manifesto">A collection of essays, speculative notes, and critical readings on architecture, space, and landscape.</p>
             </header>
 
-          <div class="journal-list" id="main-journal-list">
-
-    <div id="loading-posts"
-         style="
-            padding:3rem 0;
-            color:#6e6e6e;
-            font-family:'Courier Prime',monospace;
-            font-size:.85rem;">
-        Loading articles...
-    </div>
-
-</div>
+            <div class="journal-list" id="main-journal-list">
+                <div id="loading-posts"
+                     style="
+                        padding:3rem 0;
+                        color:#6e6e6e;
+                        font-family:'Courier Prime',monospace;
+                        font-size:.85rem;">
+                    Loading articles...
+                </div>
             </div>
-    <div class="homepage-pagination" id="numeric-pagination"></div>
+            
+            <div class="homepage-pagination" id="numeric-pagination"></div>
         </section>
+
         <section id="about-view" class="view-section">
             <div class="about-view">
                 <header class="essay-header">
-                    <h2 class="essay-title-large">Tentang aaddii.com</h2>
+                    <h2 class="essay-title-large">About aaddii.com</h2>
                 </header>
                 <div class="essay-body">
-                    <p>Platform ini adalah jurnal terbuka yang berfokus pada kritik arsitektur, dokumentasi spasial, serta observasi materialitas dalam praktik perancangan lingkungan binaan modern.</p>
+                    <p>This platform is an open journal focusing on architectural criticism, spatial documentation, and observations of materiality in modern built environment design practices.</p>
                 </div>
             </div>
         </section>
@@ -61,9 +60,10 @@
     <footer class="site-footer">
         <div class="footer-container">
             <p>&copy; 2026 aaddii.com.</p>
-            <p>Indeks Jurnal Terbuka.</p>
+            <p>Open Journal Index.</p>
         </div>
     </footer>
-<script src="./assets/js/main.js"></script>
+    
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>
