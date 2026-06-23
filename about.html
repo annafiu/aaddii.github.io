@@ -3,14 +3,44 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>About — Adi Iman Wicaksono</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/main.css">
+
+    <style>
+        .about-grid {
+            display: flex;
+            gap: 5rem;
+            align-items: flex-start;
+            margin-top: 2rem;
+        }
+        .about-image {
+            flex: 1;
+            position: sticky;
+            top: 2rem;
+        }
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(20%); /* Estetika minimalis */
+        }
+        .about-content {
+            flex: 1.5;
+        }
+        @media (max-width: 768px) {
+            .about-grid {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .about-image {
+                position: relative;
+            }
+        }
+    </style>
 </head>
     
 <body class="post-page">
@@ -26,31 +56,30 @@
 
     <div class="container-main">
         <section id="post-view" class="view-section active-view">
-            <div class="article-container">
-                <article>
+            <div class="article-container about-grid">
+                
+                <div class="about-image">
+                    <img src="https://via.placeholder.com/600x800?text=Adi+Iman+Wicaksono" alt="Adi Iman Wicaksono">
+                </div>
+
+                <article class="about-content">
                     <header class="essay-header">
                         <div class="journal-meta">
-                            <span>Architect & Writer</span>
-                            <span>Adi Iman Wicaksono</span>
+                            <span>Biography</span>
                         </div>
-                        <h1 id="title" class="journal-title">About Adi Iman Wicaksono</h1>
+                        <h1 class="journal-title">About Adi Iman Wicaksono</h1>
                     </header>
                     
                     <div id="content">
                         <p>I believe design should be critical, contextual, conscious, and efficient; above all, it must make sense.</p>
                         
-                        <p>I am an Architect at <strong>Tamara Wibowo Architects</strong> based in Semarang, Indonesia. My professional practice spans from early preliminary design proposals to overseeing construction projects, covering everything from interior elements to public building scales. I am committed to establishing efficient project workflows with a detail-oriented approach.</p>
+                        <p>I am an Architect at <strong>Tamara Wibowo Architects</strong> based in Semarang, Indonesia. My professional practice spans from early preliminary design proposals to overseeing construction projects, covering everything from interior elements to public building scales.</p>
                         
                         <h2>Beyond the Drafting Table</h2>
                         <p>While my professional focus lies in architectural practice, I am equally passionate about the discourse surrounding architecture and art. I have extensive experience in critical writing, architectural publishing, and historical research.</p>
                         
-                        <p>My editorial experience includes serving as the Managing Editor for <em>PALIMPSEST</em> (Department of Architecture ITS Selected Studio Projects 2018) and Editor-in-Chief for <em>SKALA</em>, the Department of Architecture ITS student magazine. Additionally, I have contributed to anthropological research on mid-20th-century Indonesian modernity, such as the <em>Juragan Style</em> architectural archive exhibition.</p>
-                        
-                        <h2>Education & Recognition</h2>
-                        <p>I hold a Bachelor of Architecture (BArch) from <strong>Institut Teknologi Sepuluh Nopember (ITS)</strong>, graduating with a GPA of 3.62/4.00. My work has been recognized through several awards, including being the 2nd Winner of the Krearture Series Vol. 4 (2021) and receiving the 2nd Prize in the Urbane Fellowship Program (2019).</p>
-
-                        <h2>Writing & Documentation</h2>
-                        <p>This platform serves as a space for me to document my thoughts and critical observations. You can find my further writings on architectural and cultural discourse on my <a href="https://medium.com/@adi.iman.wicaksono" target="_blank">Medium account</a>, or view my professional journey on <a href="https://www.linkedin.com/in/adi-iman-wicaksono/" target="_blank">LinkedIn</a> and <a href="https://www.instagram.com/aadiiwicaksono/" target="_blank">Instagram</a>.</p>
+                        <h2>Connect</h2>
+                        <p>This platform serves as a space for me to document my thoughts and critical observations. Connect with me via <a href="https://medium.com/@adi.iman.wicaksono" target="_blank">Medium</a>, <a href="https://www.linkedin.com/in/adi-iman-wicaksono/" target="_blank">LinkedIn</a>, or <a href="https://www.instagram.com/aadiiwicaksono/" target="_blank">Instagram</a>.</p>
                     </div>
                 </article>
             </div>
@@ -60,10 +89,7 @@
     <footer class="site-footer">
         <div class="footer-container">
             <p>&copy; 2026 aaddii.com.</p>
-            <p>Open Journal Index.</p>
         </div>
     </footer>
-
-    <script src="./assets/js/main.js"></script>
 </body>
 </html>
