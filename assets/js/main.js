@@ -19,6 +19,21 @@ function getSlug(){
     return url.get('slug');
 }
 
+/** 
+ * AUTO-CLEAN BLOGGER IMAGE LINKS
+ * Membuka bungkus link agar fungsi zoom berjalan
+ */
+function cleanImageLinks() {
+    const postImages = document.querySelectorAll('#content a > img');
+    postImages.forEach(function(img) {
+        const parentLink = img.parentElement;
+        if (parentLink.tagName === 'A' && parentLink.href.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
+            parentLink.parentNode.insertBefore(img, parentLink);
+            parentLink.parentNode.removeChild(parentLink);
+        }
+    });
+}
+
 /* =====================================
    INDEX PAGE UTILITIES
 ===================================== */
@@ -109,9 +124,6 @@ function loadPosts(data){
         container.appendChild(article);
     });
 
-    // =====================================
-    // NUMERIC PAGINATION LOGIC
-    // =====================================
     const paginationContainer = document.getElementById('numeric-pagination');
     
     if (paginationContainer) {
@@ -225,6 +237,9 @@ function renderPost(data){
     content = content.replace(/<h1[^>]*>.*?<\/h1>/gis, '');
     contentElement.innerHTML = content;
 
+    // Bersihkan link gambar Blogger
+    cleanImageLinks();
+
     // =====================================
     // AUTOMATIC NAVIGATION LOGIC
     // =====================================
@@ -282,7 +297,6 @@ function renderPost(data){
         }
     }
 
-    // Initialize Medium-style image zoom after post content is loaded
     initImageZoom();
 } 
 
@@ -352,11 +366,9 @@ function initImageZoom() {
         img.addEventListener('click', function(e) {
             e.stopPropagation(); 
             
-            // 1. Create background overlay container
             const overlay = document.createElement('div');
             overlay.className = 'image-zoom-overlay';
             
-            // 2. Create duplicate element for zoom
             const zoomedImg = document.createElement('img');
             zoomedImg.src = this.src;
             zoomedImg.className = 'image-zoomed';
@@ -364,44 +376,33 @@ function initImageZoom() {
             overlay.appendChild(zoomedImg);
             document.body.appendChild(overlay);
             
-            // Store initial scroll coordinates
             const initialScrollY = window.scrollY;
             
-            // Enter zoom mode
             setTimeout(() => {
                 overlay.classList.add('active');
             }, 10);
             
-            // Close zoom function
             let isClosing = false;
             function closeZoom() {
                 if (isClosing) return;
                 isClosing = true;
                 
                 overlay.classList.remove('active');
-                
-                // Remove listener to prevent memory leaks
                 window.removeEventListener('scroll', handleScrollClose);
                 
                 setTimeout(() => {
                     overlay.remove();
-                }, 300); // Sync with CSS transition
+                }, 300);
             }
             
-            // MAIN FEATURE: Detect natural page scroll
             function handleScrollClose() {
                 const scrollDelta = Math.abs(window.scrollY - initialScrollY);
-                
-                // If user scrolls > 20px, execute smooth zoom out
                 if (scrollDelta > 20) {
                     closeZoom();
                 }
             }
             
-            // A. Click on image or overlay to close
             overlay.addEventListener('click', closeZoom);
-            
-            // B. Natural scroll detection (passive: true for smooth performance)
             window.addEventListener('scroll', handleScrollClose, { passive: true });
         });
     });
@@ -422,12 +423,10 @@ window.addEventListener('message', (event) => {
                 }
             }
         } catch (e) {
-            // Passthrough safely
         }
     }
 });
 
-/* FALLBACK: Check iframe height every 1.5 seconds */
 setInterval(() => {
     const cusdisIframe = document.querySelector('#cusdis_thread iframe');
     if (cusdisIframe && cusdisIframe.contentWindow) {
@@ -437,7 +436,6 @@ setInterval(() => {
                 cusdisIframe.style.setProperty('height', `${internalHeight + 20}px`, 'important');
             }
         } catch (e) {
-            // Cross-origin blocked, handled by message listener
         }
     }
 }, 1500);
