@@ -6,10 +6,10 @@
 }
 
 :root {
-    --bg-color: #faf9f6;       
+    --bg-color: #faf9f6;        
     --text-main: #111111;      
     --text-muted: #6e6e6e;     
-    --border-color: #e8e6e0;   
+    --border-color: #e8e6e0;    
     
     --font-sans: 'Inter', sans-serif;
     --font-mono: 'Courier Prime', monospace;
@@ -166,8 +166,11 @@ body {
 }
 
 .journal-excerpt {
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-main);
     max-width: 680px;
     margin-bottom: 0.75rem;
 }
@@ -289,7 +292,7 @@ body {
 /* --- MAIN FOOTER (For Home / Default Pages) --- */
 .site-footer {
     max-width: 1200px;
-    margin: 8rem auto 0 auto; /* Keep default 8rem margin for main pages */
+    margin: 8rem auto 0 auto; 
     padding: 3rem 2rem;
     border-top: 1px solid var(--border-color);
     font-family: var(--font-mono);
@@ -298,7 +301,6 @@ body {
 }
 
 /* --- SPECIFIC POST PAGE FOOTER --- */
-/* This selector will only be active if .site-footer is inside a body with the .post-page class */
 .post-page .site-footer {
     margin: -2rem auto 0 auto !important; 
 }
@@ -469,8 +471,6 @@ body {
 }
 
 /* --- FIX ABSOLUTE LIVE RESIZE & NO-SCROLL --- */
-
-/* 1. Force the main wrapper container to always be flexible */
 #cusdis_thread, 
 .custom-cusdis-container {
     display: block !important;
@@ -480,19 +480,16 @@ body {
     font-family: inherit !important; 
 }
 
-/* 2. Let the JS script in main.js take full control of its dynamic height */
 #cusdis_thread iframe,
 .custom-cusdis-container iframe {
     display: block !important;
     width: 100% !important;
-    /* Use max-content so it tries to expand to the maximum height of its own content */
     min-height: max-content !important; 
-    height: 100% !important; /* Revert to 100% if using max-content */
+    height: 100% !important; 
     overflow: hidden !important; 
     border: none !important;
 }
 
-/* 3. Disable Webkit (Chrome/Safari) and Gecko (Firefox) scrollbar engines in layers */
 iframe[src*="cusdis.com"] {
     scrollbar-width: none !important;
 }
@@ -518,6 +515,7 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
         display: none; 
     }
 }
+
 /* ========================================================
    MEDIUM.COM IMAGE ZOOM EFFECT STYLES
 ======================================================== */
@@ -528,14 +526,13 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(250, 249, 246, 0.96); /* Following your web's minimalist cream color */
+    background-color: rgba(250, 249, 246, 0.96); 
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     cursor: zoom-out;
-    /* Custom bezier curve (cubic-bezier) for super smooth Medium-style transition */
     transition: opacity 0.3s cubic-bezier(0.2, 0, 0.2, 1);
     will-change: opacity;
 }
@@ -550,7 +547,6 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     will-change: transform;
 }
 
-/* When active mode is running */
 .image-zoom-overlay.active {
     opacity: 1;
 }
@@ -559,18 +555,17 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     transform: scale(1);
 }
 
-/* Styling for Blogger image captions */
 .tr-caption-container {
-    margin-top: 10px !important; /* Set margin between the image and the caption */
+    margin-top: 10px !important; 
     width: 100% !important;
 }
 
 .tr-caption {
-    font-size: 0.85rem;      /* Reduce font size for a cleaner look */
-    color: #777;             /* Apply a soft gray color for better contrast */
-    font-style: italic;      /* Add italic style for aesthetic emphasis */
-    line-height: 1.4;        /* Improve readability with optimized line spacing */
-    text-align: center;      /* Ensure the caption is centered */
+    font-size: 0.85rem;      
+    color: #777;               
+    font-style: italic;      
+    line-height: 1.4;        
+    text-align: center;      
     padding: 5px 0;
 }
 
