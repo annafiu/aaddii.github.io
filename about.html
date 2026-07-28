@@ -42,6 +42,35 @@
             display: none !important;
         }
 
+        /* Styling untuk Kontak di bawah foto */
+        .contact-section {
+            margin-top: 1.5rem;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contact-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-list li a {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #ccc;
+            transition: all 0.2s;
+        }
+
+        .contact-list li a:hover {
+            color: #000;
+            border-bottom: 1px solid #000;
+        }
+
         @media (max-width: 768px) {
             .about-grid {
                 flex-direction: column;
@@ -69,9 +98,18 @@
         <section id="post-view" class="view-section active-view">
             <div class="article-container about-grid">
                 
-                <!-- Kolom Kiri: Foto -->
+                <!-- Kolom Kiri: Foto & Kontak -->
                 <div class="about-image">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj99-ClOiiIRJU91buFJ6NhGwUXWXluh22-5W2lwRmFaz6JM9c_wUahrSfb1hksp3TW8V8rDFag7JhQ7IpWbGgXWbUDZIWBttcP_dcAriytu9PeVOm1SFmPQ0XNsMwsnSvfoko0yT2CYD6fY_TPjE7uDSAHZCygJE_2mWhjaNPJB4v9c8RPu1yJIe7NbZeB/s16000/Every%20time%20I%20tell%20people%20about%20our%20trip,%20instead%20of%20the%20architecture,%20temples,%20or%20food,%20immedia.webp" alt="Adi Iman Wicaksono">
+                    
+                    <div class="contact-section">
+                        <ul class="contact-list">
+                            <li><a href="mailto:adi.iman.w@email.com">Email</a></li>
+                            <li><a href="https://www.linkedin.com/in/adi-iman-wicaksono/" target="_blank">LinkedIn</a></li>
+                            <li><a href="https://www.instagram.com/aadiiwicaksono/" target="_blank">Instagram</a></li>
+                            <li><a href="https://medium.com/@adi.iman.wicaksono" target="_blank">Medium</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Kolom Kanan: Tulisan -->
