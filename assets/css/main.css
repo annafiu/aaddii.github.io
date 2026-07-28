@@ -573,3 +573,32 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
     text-align: center;      /* Ensure the caption is centered */
     padding: 5px 0;
 }
+
+/* Contact section */
+.contact-section {
+    margin-top: 1.5rem;
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li {
+    margin-bottom: 0.5rem;
+}
+
+.contact-list li a {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+    transition: all 0.2s;
+}
+
+.contact-list li a:hover {
+    color: #000;
+    border-bottom: 1px solid #000;
+}
