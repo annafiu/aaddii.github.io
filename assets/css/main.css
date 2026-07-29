@@ -270,7 +270,7 @@ body {
 
 .essay-body p {
     margin-bottom: 2rem;
-    text-align: justify;
+    text-align: left; /* Diubah agar rata kiri ala Medium */
 }
 
 /* --- IN-POST NAVIGATION --- */
@@ -314,20 +314,24 @@ body {
 .article-container {
     max-width: 760px;
     margin: 60px auto 80px;
-    padding: 0 32px;
+    padding: 0 20px; /* Disesuaikan sedikit agar pas di mobile */
 }
 
 #content {
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: 17px; /* Sedikit dinaikkan agar nyaman dibaca ala Medium */
     font-weight: 300;
-    line-height: 1.85;
+    line-height: 1.65; /* Jarak antar baris pas */
+    letter-spacing: -0.003em; /* Sedikit merapatkan huruf agar kanan lebih padat */
     color: var(--text-main);
 }
 
+/* --- PERBAIKAN GAMBAR AGAR RESPONSIF --- */
 #content img {
-    width: 100%;
-    height: auto;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 24px auto;
 }
 
 #content blockquote {
@@ -342,18 +346,19 @@ body {
 }
 
 #content p {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    text-align: left !important; /* Memastikan teks konsisten rata kiri ala Medium */
 }
 
 #content h2 {
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 400;
     letter-spacing: -0.02em;
     margin: 40px 0 16px;
 }
 
 #content h3 {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 400;
     margin: 32px 0 12px;
 }
@@ -562,7 +567,7 @@ iframe[src*="cusdis.com"]::-webkit-scrollbar {
 
 .tr-caption {
     font-size: 0.85rem;      
-    color: #777;               
+    color: #777;                 
     font-style: italic;      
     line-height: 1.4;        
     text-align: center;      
