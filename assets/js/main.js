@@ -272,7 +272,7 @@ function renderPost(data){
     }
 
     // =====================================
-    // CUSDIS HYBRID INTEGRATION (CDN SDK + VERCEL HOST)
+    // CUSDIS INTEGRATION WITH AUTO CSS FIX
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
@@ -284,15 +284,33 @@ function renderPost(data){
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
 
-        if (window.CUSDIS) {
-            window.CUSDIS.initial();
-        } else {
+        const loadCusdisSDK = () => {
             const script = document.createElement('script');
             script.async = true;
             script.defer = true;
             script.src = 'https://cusdis.com/js/cusdis.es.js';
             document.body.appendChild(script);
+        };
+
+        if (window.CUSDIS) {
+            window.CUSDIS.initial();
+        } else {
+            loadCusdisSDK();
         }
+
+        // Observer untuk memperbaiki link CSS di dalam iframe secara otomatis saat iframe terbuat
+        const observer = new MutationObserver(() => {
+            const iframe = cusdisThread.querySelector('iframe');
+            if (iframe && iframe.srcdoc && iframe.srcdoc.includes('aadddii-cusdis.vercel.app/js/style.css')) {
+                iframe.srcdoc = iframe.srcdoc.replace(
+                    'https://aadddii-cusdis.vercel.app/js/style.css', 
+                    'https://cusdis.com/js/style.css'
+                );
+                observer.disconnect(); // Stop watching once fixed
+            }
+        });
+
+        observer.observe(cusdisThread, { childList: true, subtree: true });
     }
 
     initImageZoom();
