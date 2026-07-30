@@ -21,6 +21,7 @@ function getSlug(){
 
 /** 
  * AUTO-CLEAN BLOGGER IMAGE LINKS
+ * Membuka bungkus link agar fungsi zoom berjalan
  */
 function cleanImageLinks() {
     const postImages = document.querySelectorAll('#content a > img');
@@ -271,37 +272,27 @@ function renderPost(data){
     }
 
     // =====================================
-    // CUSDIS RELIABLE INJECTION (DIRECT IFRAME API)
+    // CUSDIS ORIGINAL / DEFAULT INTEGRATION
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
         cusdisThread.innerHTML = ''; 
 
-        // Atribut Data Cusdis
-        cusdisThread.setAttribute('data-host', 'https://aadddii-cusdis.vercel.app');
+        cusdisThread.setAttribute('data-host', 'https://cusdis.com');
         cusdisThread.setAttribute('data-app-id', '7f52ddab-e25f-4681-acae-3fa125e044af');
         cusdisThread.setAttribute('data-page-id', slug); 
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
 
-        // Hapus script Cusdis lama jika pernah dimuat
-        const oldScript = document.getElementById('cusdis-sdk');
-        if (oldScript) oldScript.remove();
-
-        // Load ulang Cusdis SDK secara bersih
-        const script = document.createElement('script');
-        script.id = 'cusdis-sdk';
-        script.async = true;
-        script.defer = true;
-        script.src = 'https://cusdis.com/js/cusdis.es.js';
-
-        script.onload = () => {
-            if (window.CUSDIS) {
-                window.CUSDIS.initial();
-            }
-        };
-
-        document.body.appendChild(script);
+        if (window.CUSDIS) {
+            window.CUSDIS.initial();
+        } else {
+            const script = document.createElement('script');
+            script.async = true;
+            script.defer = true;
+            script.src = 'https://cusdis.com/js/cusdis.es.js';
+            document.body.appendChild(script);
+        }
     }
 
     initImageZoom();
