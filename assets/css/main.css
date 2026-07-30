@@ -148,6 +148,11 @@ body {
     letter-spacing: -0.01em;
 }
 
+/* Ukuran khusus journal-title di halaman utama (homepage) */
+.journal-list .journal-title {
+    font-size: 1.5rem;
+}
+
 .journal-link {
     color: var(--text-main);
     text-decoration: none;
