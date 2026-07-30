@@ -272,21 +272,23 @@ function renderPost(data){
     }
 
     // =====================================
-    // CUSDIS DIRECT IFRAME INTEGRATION
+    // CUSDIS DYNAMIC SCRIPT INTEGRATION
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
-        const cusdisUrl = `https://aadddii-cusdis.vercel.app/embed?app_id=7f52ddab-e25f-4681-acae-3fa125e044af&page_id=${slug}&page_url=${encodeURIComponent(window.location.href)}&page_title=${encodeURIComponent(title)}`;
+        cusdisThread.innerHTML = ''; 
         
-        cusdisThread.innerHTML = `
-            <iframe 
-                src="${cusdisUrl}" 
-                id="cusdis_iframe"
-                title="Cusdis Comments"
-                style="width: 100%; border: none; min-height: 280px; overflow: hidden;"
-                scrolling="no">
-            </iframe>
-        `;
+        cusdisThread.setAttribute('data-host', 'https://aadddii-cusdis.vercel.app');
+        cusdisThread.setAttribute('data-app-id', '7f52ddab-e25f-4681-acae-3fa125e044af');
+        cusdisThread.setAttribute('data-page-id', slug); 
+        cusdisThread.setAttribute('data-page-url', window.location.href);
+        cusdisThread.setAttribute('data-page-title', title);
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        cusdisThread.appendChild(script);
     }
 
     initImageZoom();
@@ -399,25 +401,6 @@ function initImageZoom() {
         });
     });
 }
-
-/* ========================================================
-   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR
-======================================================== */
-window.addEventListener('message', (event) => {
-    if (event.data) {
-        try {
-            const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-            
-            if (data.type === 'resize' && data.height) {
-                const cusdisIframe = document.querySelector('#cusdis_thread iframe');
-                if (cusdisIframe) {
-                    cusdisIframe.style.setProperty('height', `${data.height + 40}px`, 'important');
-                }
-            }
-        } catch (e) {
-        }
-    }
-});
 
 /* =====================================
    PAGE INIT
