@@ -276,8 +276,8 @@ function renderPost(data){
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
-        cusdisThread.setAttribute('data-host', 'https://cusdis.com');
-        cusdisThread.setAttribute('data-app-id', '81ea97a7-cb6d-4a6a-97f9-a7afe09ff5dd');
+        cusdisThread.setAttribute('data-host', 'https://aadddii-cusdis.vercel.app');
+        cusdisThread.setAttribute('data-app-id', '7f52ddab-e25f-4681-acae-3fa125e044af');
         cusdisThread.setAttribute('data-page-id', slug); 
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
