@@ -272,36 +272,21 @@ function renderPost(data){
     }
 
     // =====================================
-    // CUSDIS DYNAMIC COMMENT INTEGRATION
+    // CUSDIS DIRECT IFRAME INTEGRATION
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
-        cusdisThread.setAttribute('data-host', 'https://aadddii-cusdis.vercel.app');
-        cusdisThread.setAttribute('data-app-id', '7f52ddab-e25f-4681-acae-3fa125e044af');
-        cusdisThread.setAttribute('data-page-id', slug); 
-        cusdisThread.setAttribute('data-page-url', window.location.href);
-        cusdisThread.setAttribute('data-page-title', title);
-        cusdisThread.setAttribute('data-iframe-auto-height', 'true');
-
-        // Bersihkan script lama jika ada agar merefresh pemicu iframe
-        const oldScript = document.getElementById('cusdis-script');
-        if (oldScript) {
-            oldScript.remove();
-        }
-
-        const script = document.createElement('script');
-        script.id = 'cusdis-script';
-        script.async = true;
-        script.defer = true;
-        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        const cusdisUrl = `https://aadddii-cusdis.vercel.app/embed?app_id=7f52ddab-e25f-4681-acae-3fa125e044af&page_id=${slug}&page_url=${encodeURIComponent(window.location.href)}&page_title=${encodeURIComponent(title)}`;
         
-        script.onload = () => {
-            if (window.CUSDIS && typeof window.CUSDIS.renderDoc === 'function') {
-                window.CUSDIS.renderDoc(cusdisThread);
-            }
-        };
-
-        document.body.appendChild(script);
+        cusdisThread.innerHTML = `
+            <iframe 
+                src="${cusdisUrl}" 
+                id="cusdis_iframe"
+                title="Cusdis Comments"
+                style="width: 100%; border: none; min-height: 280px; overflow: hidden;"
+                scrolling="no">
+            </iframe>
+        `;
     }
 
     initImageZoom();
@@ -416,7 +401,7 @@ function initImageZoom() {
 }
 
 /* ========================================================
-   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR (ENHANCED)
+   CUSDIS LIVE AUTO-HEIGHT MESSENGER RECEPTOR
 ======================================================== */
 window.addEventListener('message', (event) => {
     if (event.data) {
@@ -433,19 +418,6 @@ window.addEventListener('message', (event) => {
         }
     }
 });
-
-setInterval(() => {
-    const cusdisIframe = document.querySelector('#cusdis_thread iframe');
-    if (cusdisIframe && cusdisIframe.contentWindow) {
-        try {
-            const internalHeight = cusdisIframe.contentWindow.document.body.scrollHeight;
-            if (internalHeight && internalHeight > 150) {
-                cusdisIframe.style.setProperty('height', `${internalHeight + 20}px`, 'important');
-            }
-        } catch (e) {
-        }
-    }
-}, 1500);
 
 /* =====================================
    PAGE INIT
