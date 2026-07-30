@@ -21,7 +21,6 @@ function getSlug(){
 
 /** 
  * AUTO-CLEAN BLOGGER IMAGE LINKS
- * Membuka bungkus link agar fungsi zoom berjalan
  */
 function cleanImageLinks() {
     const postImages = document.querySelectorAll('#content a > img');
@@ -272,45 +271,37 @@ function renderPost(data){
     }
 
     // =====================================
-    // CUSDIS INTEGRATION WITH AUTO CSS FIX
+    // CUSDIS RELIABLE INJECTION (DIRECT IFRAME API)
     // =====================================
     const cusdisThread = document.getElementById('cusdis_thread');
     if (cusdisThread) {
         cusdisThread.innerHTML = ''; 
 
+        // Atribut Data Cusdis
         cusdisThread.setAttribute('data-host', 'https://aadddii-cusdis.vercel.app');
         cusdisThread.setAttribute('data-app-id', '7f52ddab-e25f-4681-acae-3fa125e044af');
         cusdisThread.setAttribute('data-page-id', slug); 
         cusdisThread.setAttribute('data-page-url', window.location.href);
         cusdisThread.setAttribute('data-page-title', title);
 
-        const loadCusdisSDK = () => {
-            const script = document.createElement('script');
-            script.async = true;
-            script.defer = true;
-            script.src = 'https://cusdis.com/js/cusdis.es.js';
-            document.body.appendChild(script);
+        // Hapus script Cusdis lama jika pernah dimuat
+        const oldScript = document.getElementById('cusdis-sdk');
+        if (oldScript) oldScript.remove();
+
+        // Load ulang Cusdis SDK secara bersih
+        const script = document.createElement('script');
+        script.id = 'cusdis-sdk';
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+
+        script.onload = () => {
+            if (window.CUSDIS) {
+                window.CUSDIS.initial();
+            }
         };
 
-        if (window.CUSDIS) {
-            window.CUSDIS.initial();
-        } else {
-            loadCusdisSDK();
-        }
-
-        // Observer untuk memperbaiki link CSS di dalam iframe secara otomatis saat iframe terbuat
-        const observer = new MutationObserver(() => {
-            const iframe = cusdisThread.querySelector('iframe');
-            if (iframe && iframe.srcdoc && iframe.srcdoc.includes('aadddii-cusdis.vercel.app/js/style.css')) {
-                iframe.srcdoc = iframe.srcdoc.replace(
-                    'https://aadddii-cusdis.vercel.app/js/style.css', 
-                    'https://cusdis.com/js/style.css'
-                );
-                observer.disconnect(); // Stop watching once fixed
-            }
-        });
-
-        observer.observe(cusdisThread, { childList: true, subtree: true });
+        document.body.appendChild(script);
     }
 
     initImageZoom();
